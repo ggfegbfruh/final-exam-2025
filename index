@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025 期末复习资料站</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 min-h-screen py-10 px-4">
+
+    <div class="max-w-2xl mx-auto">
+        <div class="bg-blue-700 text-white p-6 rounded-t-2xl shadow-lg text-center">
+            <h1 class="text-3xl font-bold mb-2">📚 2025 期末复习资料</h1>
+            <p class="text-blue-100 text-sm opacity-80">操作系统(OS) / 综合复习</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-b-2xl shadow-lg border border-slate-200 space-y-4">
+            
+            <div class="space-y-2">
+                <h2 class="font-bold text-slate-700 border-b pb-2 mb-3 flex items-center">
+                    <span class="mr-2">💻</span> 操作系统计算题演示
+                </h2>
+                
+                <a href="OS1多道批处理.html" class="flex items-center justify-between p-3 bg-blue-50 hover:bg-blue-100 text-blue-800 rounded-lg transition border border-blue-100 group">
+                    <span class="font-bold">OS1 多道批处理</span>
+                    <span class="text-xs bg-white px-2 py-1 rounded text-blue-600 group-hover:bg-blue-200">演示</span>
+                </a>
+                
+                <a href="OS3银行家算法.html" class="flex items-center justify-between p-3 bg-blue-50 hover:bg-blue-100 text-blue-800 rounded-lg transition border border-blue-100 group">
+                    <span class="font-bold">OS3 银行家算法</span>
+                    <span class="text-xs bg-white px-2 py-1 rounded text-blue-600 group-hover:bg-blue-200">演示</span>
+                </a>
+
+                <a href="OS4分页存储地址转换.html" class="flex items-center justify-between p-3 bg-blue-50 hover:bg-blue-100 text-blue-800 rounded-lg transition border border-blue-100 group">
+                    <span class="font-bold">OS4 分页存储地址转换</span>
+                    <span class="text-xs bg-white px-2 py-1 rounded text-blue-600 group-hover:bg-blue-200">演示</span>
+                </a>
+
+                <a href="OS5LRU算法.html" class="flex items-center justify-between p-3 bg-blue-50 hover:bg-blue-100 text-blue-800 rounded-lg transition border border-blue-100 group">
+                    <span class="font-bold">OS5 LRU算法</span>
+                    <span class="text-xs bg-white px-2 py-1 rounded text-blue-600 group-hover:bg-blue-200">演示</span>
+                </a>
+
+                <a href="OS8最短寻道时间优先.html" class="flex items-center justify-between p-3 bg-blue-50 hover:bg-blue-100 text-blue-800 rounded-lg transition border border-blue-100 group">
+                    <span class="font-bold">OS8 最短寻道时间优先</span>
+                    <span class="text-xs bg-white px-2 py-1 rounded text-blue-600 group-hover:bg-blue-200">演示</span>
+                </a>
+
+                <a href="OS9PV操作.html" class="flex items-center justify-between p-3 bg-blue-50 hover:bg-blue-100 text-blue-800 rounded-lg transition border border-blue-100 group">
+                    <span class="font-bold">OS9 PV操作</span>
+                    <span class="text-xs bg-white px-2 py-1 rounded text-blue-600 group-hover:bg-blue-200">演示</span>
+                </a>
+            </div>
+
+            <div class="space-y-2 pt-4">
+                <h2 class="font-bold text-slate-700 border-b pb-2 mb-3 flex items-center">
+                    <span class="mr-2">📝</span> 综合复习资料
+                </h2>
+                
+                <a href="选择、判断、简答（1）.html" class="block p-3 bg-amber-50 hover:bg-amber-100 text-amber-900 rounded-lg transition border border-amber-100">
+                    📄 选择、判断、简答（1）
+                </a>
+                <a href="选择、判断、简答（2）.html" class="block p-3 bg-amber-50 hover:bg-amber-100 text-amber-900 rounded-lg transition border border-amber-100">
+                    📄 选择、判断、简答（2）
+                </a>
+            </div>
+
+        </div>
+
+        <div class="text-center mt-6 text-slate-400 text-xs">
+            祝大家逢考必过！💯
+        </div>
+    </div>
+
+</body>
+</html>
