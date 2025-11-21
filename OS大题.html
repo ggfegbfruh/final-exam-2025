@@ -3,744 +3,485 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>操作系统 - 重点大题突击 (1,3,4,5,8,9)</title>
+    <title>操作系统：计算题专项训练</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- 引入手写风格字体 -->
     <link href="https://fonts.googleapis.com" rel="preconnect">
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
-    <link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <!-- 图标库 -->
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
-    
+    <!-- Using Noto Serif SC for body text and Ma Shan Zheng for the "Red Pen" handwritten effect -->
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0" rel="stylesheet">
     <style>
-        /* --- 全局样式 --- */
         body {
             background-color: #f3f4f6;
             font-family: 'Noto Serif SC', serif;
-            scroll-behavior: smooth;
         }
-        
-        /* 手写字体定义 */
-        .font-hand {
-            font-family: 'Ma Shan Zheng', cursive;
-            line-height: 1.6;
-        }
-        .font-student {
-            font-family: 'Long Cang', cursive;
-        }
-        .font-code {
-            font-family: 'Roboto Mono', monospace;
-        }
-
-        /* 试卷纸张效果 */
-        .paper-sheet {
-            background-color: #fdfbf7;
-            background-image: 
-                linear-gradient(90deg, transparent 79px, #ef4444 79px, #ef4444 81px, transparent 81px),
-                linear-gradient(#e5e7eb 1px, transparent 1px);
-            background-size: 100% 2rem;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        .paper {
+            background-color: white;
+            width: 210mm;
+            min-height: 297mm;
+            margin: 20px auto;
+            padding: 20mm;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
             position: relative;
-            line-height: 2rem;
         }
-        
-        /* 墨水颜色 */
-        .ink-blue { color: #1e3a8a; } /* 答题颜色 */
-        .ink-red { color: #c0392b; }   /* 批改颜色 */
+        /* Handwritten Style */
+        .red-pen {
+            font-family: 'Ma Shan Zheng', cursive;
+            color: #dc2626; /* Red-600 */
+            font-size: 1.15em;
+            transform: rotate(-0.5deg);
+            display: block;
+        }
+        .red-note {
+            font-family: 'Ma Shan Zheng', cursive;
+            color: #ef4444; /* Red-500 */
+            font-size: 0.9em;
+            margin-top: 4px;
+        }
+        .answer-block {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-left: 3px solid #fecaca; /* Red-200 */
+            background-color: #fef2f2; /* Red-50 */
+            color: #b91c1c;
+            font-family: 'Ma Shan Zheng', cursive;
+            display: none; /* Hidden by default */
+        }
+        .show-answer .answer-block {
+            display: block;
+        }
+        /* Tables in Answers */
+        .ans-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            font-size: 0.95em;
+        }
+        .ans-table th, .ans-table td {
+            border: 1px solid #b91c1c;
+            padding: 4px 8px;
+            text-align: center;
+        }
+        .ans-table th {
+            background-color: #fee2e2;
+        }
+        /* Gantt Chart Styles */
+        .gantt-box {
+            display: flex;
+            border: 2px solid #b91c1c;
+            margin: 10px 0;
+            height: 40px;
+            width: 100%;
+            max-width: 600px;
+            font-family: sans-serif;
+            font-size: 0.8em;
+        }
+        .g-seg {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-right: 1px solid #b91c1c;
+            position: relative;
+            color: black;
+            font-weight: bold;
+        }
+        .g-seg:last-child { border-right: none; }
+        .g-p1 { background-color: #bfdbfe; } /* Blue-200 */
+        .g-p2 { background-color: #bbf7d0; } /* Green-200 */
+        .g-idle { background-color: #e5e7eb; color: #6b7280; } /* Gray-200 */
+        .g-time {
+            position: absolute;
+            bottom: -20px;
+            right: -10px;
+            font-size: 0.8em;
+            color: #b91c1c;
+            font-family: 'Ma Shan Zheng', cursive;
+        }
+        .g-start {
+            position: absolute;
+            bottom: -20px;
+            left: -5px;
+            font-size: 0.8em;
+            color: #b91c1c;
+            font-family: 'Ma Shan Zheng', cursive;
+        }
 
-        /* 模拟器容器 */
-        .sim-container {
-            background: #ffffff;
-            border: 2px dashed #94a3b8;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            box-shadow: inset 0 2px 6px 0 rgb(0 0 0 / 0.05);
-            line-height: 1.5;
-            font-family: system-ui, sans-serif; /* 控件用回系统字体 */
+        /* Floating Controls */
+        .controls {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
         }
+        .btn {
+            background-color: #2563eb;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            font-family: sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+        .btn:hover { background-color: #1d4ed8; }
+        .btn-toggle { background-color: #4b5563; }
+        .btn-toggle:hover { background-color: #374151; }
 
-        /* 答案区域开关动画 */
-        .answer-area {
-            transition: all 0.5s ease-in-out;
-            opacity: 1;
-            max-height: 2000px;
-            overflow: hidden;
+        @media print {
+            body { background: none; }
+            .paper { margin: 0; box-shadow: none; width: 100%; padding: 0; }
+            .controls { display: none; }
+            .page-break { page-break-before: always; }
+            .answer-block { display: block !important; border-left: 1px solid #ccc; background: none; color: black; font-family: 'Noto Serif SC', serif; }
+            .red-pen, .red-note, .tick, .g-time { color: black !important; font-family: 'Noto Serif SC', serif !important; transform: none; }
         }
-        .answer-area.hidden-ans {
-            opacity: 0;
-            max-height: 0;
-            margin: 0;
-            padding: 0;
-        }
-
-        /* 侧边导航 */
-        .nav-item {
-            transition: all 0.2s;
-            border-left: 4px solid transparent;
-        }
-        .nav-item:hover {
-            background-color: #e0e7ff;
-            border-left-color: #4f46e5;
-            padding-left: 1rem;
-        }
-        
-        /* SVG 图表动画 */
-        .chart-bar { transition: height 0.5s ease; }
-        .disk-head { transition: left 0.5s cubic-bezier(0.25, 1, 0.5, 1); }
     </style>
 </head>
-<body class="flex min-h-screen">
+<body class="show-answer"> <!-- Default showing answers for preview -->
 
-    <!-- 左侧导航栏 -->
-    <aside class="w-64 bg-white fixed h-full shadow-xl z-50 hidden lg:flex flex-col">
-        <div class="p-6 border-b border-gray-100">
-            <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
-                <span class="material-symbols-outlined text-indigo-600">menu_book</span>
-                重点大题
-            </h2>
-            <p class="text-xs text-gray-500 mt-2">操作系统复习 (1,3,4,5,8,9)</p>
-        </div>
-        <nav class="flex-1 overflow-y-auto p-4 space-y-1">
-            <a href="#q1" class="nav-item block px-4 py-3 text-gray-700 font-medium rounded hover:text-indigo-700">
-                1. 多道批处理调度
-            </a>
-            <a href="#q3" class="nav-item block px-4 py-3 text-gray-700 font-medium rounded hover:text-indigo-700">
-                3. 银行家算法
-            </a>
-            <a href="#q4" class="nav-item block px-4 py-3 text-gray-700 font-medium rounded hover:text-indigo-700">
-                4. 分页地址转换
-            </a>
-            <a href="#q5" class="nav-item block px-4 py-3 text-gray-700 font-medium rounded hover:text-indigo-700">
-                5. LRU 页面置换
-            </a>
-            <a href="#q8" class="nav-item block px-4 py-3 text-gray-700 font-medium rounded hover:text-indigo-700">
-                8. SSTF 磁盘调度
-            </a>
-            <a href="#q9" class="nav-item block px-4 py-3 text-gray-700 font-medium rounded hover:text-indigo-700">
-                9. PV操作 (货架)
-            </a>
-        </nav>
-        <div class="p-4 border-t border-gray-100 bg-gray-50">
-            <button onclick="toggleAnswers()" class="w-full flex items-center justify-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded shadow hover:bg-indigo-700 transition">
-                <span class="material-symbols-outlined text-sm">visibility</span>
-                <span id="toggle-text">隐藏答案</span>
-            </button>
-        </div>
-    </aside>
+<!-- Floating Controls -->
+<div class="controls">
+    <button class="btn" onclick="exportHTML()">
+        <span class="material-symbols-outlined">save</span>
+        保存为HTML
+    </button>
+    <button class="btn btn-toggle" onclick="document.body.classList.toggle('show-answer')">
+        <span class="material-symbols-outlined">visibility</span>
+        显示/隐藏 答案解析
+    </button>
+</div>
 
-    <!-- 主内容区 -->
-    <main class="flex-1 lg:ml-64 p-4 md:p-10 max-w-5xl mx-auto">
-        
-        <!-- 顶部标题 -->
-        <div class="text-center mb-12 relative">
-            <h1 class="text-4xl font-bold text-gray-800 mb-2 tracking-widest">操作系统原理 · 综合复习卷</h1>
-            <div class="flex justify-center gap-8 text-sm text-gray-500 font-code">
-                <span>题目来源：上传图片整理</span>
-                <span>题量：6道大题</span>
-            </div>
-            <!-- 分数印章 -->
-            <div class="absolute top-0 right-4 border-4 border-red-600 rounded-full w-24 h-24 flex items-center justify-center transform rotate-12 opacity-80 answer-area">
-                <span class="font-hand text-red-600 text-5xl">Top</span>
-            </div>
+<div class="paper">
+    <!-- Header -->
+    <div class="text-center border-b-2 border-gray-800 pb-6 mb-8 relative">
+        <h1 class="text-3xl font-bold mb-2">操作系统 (OS) 计算题专项训练</h1>
+        <div class="flex justify-center gap-8 text-sm text-gray-600 mt-4 font-sans">
+            <span>试卷来源：上传图片整理</span>
+            <span>重点：调度、死锁、存储、PV</span>
+        </div>
+        <!-- Score Stamp -->
+        <div class="absolute top-0 right-0 border-4 border-red-600 rounded-full w-24 h-24 flex items-center justify-center transform rotate-12 opacity-80 answer-block" style="display: flex; background: transparent; border-color: #dc2626; color: #dc2626;">
+            <span class="red-pen text-5xl" style="transform: none;">优</span>
+        </div>
+    </div>
+
+    <!-- Q1: Process Scheduling -->
+    <div class="mb-10">
+        <h3 class="text-lg font-bold mb-3 border-l-4 border-gray-800 pl-3">一、多道批处理调度 (来源: 12.jpg)</h3>
+        <div class="p-4 bg-gray-50 rounded mb-4 text-sm">
+            <p class="mb-2"><strong>题目：</strong> 系统仅有 P1, P2 两个作业，非抢占式。P2 比 P1 晚 10ms 到达。</p>
+            <ul class="list-disc pl-5 mb-2">
+                <li>P1: 计算 50ms, I/O 70ms, 计算 30ms</li>
+                <li>P2: 计算 100ms, I/O 40ms, 计算 30ms</li>
+            </ul>
+            <p>(1) 画出运行时间关系图，计算完成两个作业所需最少时间。<br>
+               (2) CPU 有无空闲？若有，在哪段时间？CPU 利用率是多少？</p>
         </div>
 
-        <!-- 题目 1 -->
-        <section id="q1" class="mb-16">
-            <div class="paper-sheet p-8 md:pl-24 md:pr-12 rounded transform transition hover:rotate-0 md:rotate-1">
-                <div class="absolute top-6 right-6 text-gray-400 font-hand opacity-50 text-2xl">Q1</div>
+        <div class="answer-block">
+            <p class="red-pen mb-2"><strong>解：(1) 运行时间关系图 (Gantt Chart)</strong></p>
+            <p class="red-note text-xs">注：非抢占式多道批处理，P1 先到先服务。当 P1 进行 I/O 时，CPU 空闲，P2 立即接管 CPU。</p>
+            
+            <div class="relative pt-6 pb-2">
+                <div class="font-bold text-xs mb-1 text-gray-600">CPU 占用情况:</div>
+                <div class="gantt-box">
+                    <div class="g-seg g-p1" style="flex: 50;">P1<span class="g-start">0</span><span class="g-time">50</span></div>
+                    <div class="g-seg g-p2" style="flex: 100;">P2<span class="g-time">150</span></div>
+                    <div class="g-seg g-p1" style="flex: 30;">P1<span class="g-time">180</span></div>
+                    <div class="g-seg g-idle" style="flex: 10;">空<span class="g-time">190</span></div>
+                    <div class="g-seg g-p2" style="flex: 30;">P2<span class="g-time">220</span></div>
+                </div>
                 
-                <!-- 题目描述 -->
-                <div class="mb-6">
-                    <h3 class="text-xl font-bold text-gray-900 mb-4 border-l-4 border-indigo-500 pl-3">
-                        1. 多道批处理调度 (CPU利用率)
-                    </h3>
-                    <p class="text-lg text-gray-700 leading-relaxed">
-                        一个多道批处理系统中仅有 P1 和 P2 两个作业，P2 比 P1 晚 10ms 到达。它们的计算和 I/O 操作顺序如下 (单位 ms)：<br>
-                        <strong>P1:</strong> 计算 50ms → I/O 70ms → 计算 30ms<br>
-                        <strong>P2:</strong> 计算 100ms → I/O 50ms → 计算 30ms<br>
-                        (1) 画出执行时间关系图 (Gantt图)；<br>
-                        (2) 计算完成两个作业需要的最少时间；<br>
-                        (3) CPU 的利用率为多少？
-                    </p>
-                </div>
-
-                <!-- 交互演示 -->
-                <div class="sim-box">
-                    <div class="flex justify-between items-center mb-2">
-                        <span class="font-bold text-gray-500 text-xs uppercase tracking-wider">Gantt Chart Visualization</span>
-                    </div>
-                    <!-- 静态 SVG 示意图，带 JS 动态生成能力 -->
-                    <div id="chart-q1" class="overflow-x-auto bg-white border border-gray-200 rounded p-2">
-                        <!-- JS will render here -->
-                    </div>
-                    <div class="mt-2 text-xs text-gray-500 text-center">蓝色: CPU | 绿色: I/O | 红色斜线: 等待</div>
-                </div>
-
-                <!-- 答案区域 -->
-                <div class="answer-area font-hand text-2xl ink-blue">
-                    <p><strong>解：</strong></p>
-                    <ul class="list-disc pl-6 space-y-1">
-                        <li><strong>0ms:</strong> P1 到达，占用 CPU (0-50)。</li>
-                        <li><strong>50ms:</strong> P1 转 I/O (50-120)。P2 (10ms已到) 占用 CPU (50-150)。</li>
-                        <li><strong>120ms:</strong> P1 I/O 结束，申请 CPU。但 P2 正在运行 (至150)，P1 <span class="text-red-600">等待</span>。</li>
-                        <li><strong>150ms:</strong> P2 释放 CPU 转 I/O (150-200)。P1 获得 CPU (150-180)。</li>
-                        <li><strong>180ms:</strong> P1 完成。CPU 空闲。</li>
-                        <li><strong>200ms:</strong> P2 I/O 结束，获得 CPU (200-230)。</li>
-                        <li><strong>230ms:</strong> P2 完成。</li>
-                    </ul>
-                    <hr class="border-gray-300 my-4 border-dashed">
-                    <p>(2) 完成所需最少时间 T = <strong class="text-red-600">230 ms</strong>。</p>
-                    <p>(3) CPU 空闲时间 = 180ms ~ 200ms (共20ms)。</p>
-                    <p class="pl-8">CPU 利用率 = (230 - 20) / 230 ≈ <strong class="text-red-600">91.3%</strong></p>
+                <div class="font-bold text-xs mb-1 mt-4 text-gray-600">I/O 并行情况 (辅助分析):</div>
+                <div class="gantt-box" style="border-style: dashed; opacity: 0.7;">
+                    <div class="g-seg g-idle" style="flex: 50;">Wait</div>
+                    <div class="g-seg g-p1" style="flex: 70; background-color: #93c5fd;">P1 I/O<span class="g-start">50</span><span class="g-time">120</span></div>
+                    <div class="g-seg g-idle" style="flex: 30;">Wait</div>
+                    <div class="g-seg g-p2" style="flex: 40; background-color: #86efac;">P2 I/O<span class="g-start">150</span><span class="g-time">190</span></div>
+                    <div class="g-seg g-idle" style="flex: 30;">Done</div>
                 </div>
             </div>
-        </section>
 
-        <!-- 题目 3 -->
-        <section id="q3" class="mb-16">
-            <div class="paper-sheet p-8 md:pl-24 md:pr-12 rounded transform transition hover:rotate-0 md:-rotate-1">
-                <div class="absolute top-6 right-6 text-gray-400 font-hand opacity-50 text-2xl">Q3</div>
-                
-                <div class="mb-6">
-                    <h3 class="text-xl font-bold text-gray-900 mb-4 border-l-4 border-indigo-500 pl-3">
-                        3. 银行家算法 (系统安全性)
-                    </h3>
-                    <p class="text-lg text-gray-700">
-                        有 5 个进程 P0~P4，3 类资源 A, B, C。Allocation (已分配) 和 Max (最大需求) 如下表所示。
-                    </p>
-                    <div class="my-4 overflow-x-auto bg-white/50 p-2 rounded border border-gray-300">
-                        <table class="w-full text-center text-sm font-code">
-                            <tr class="bg-gray-100 font-bold"><td>Proc</td><td>Alloc (ABC)</td><td>Max (ABC)</td><td>Need (Max-Alloc)</td></tr>
-                            <tr><td>P0</td><td>1 1 2</td><td>3 4 7</td><td class="text-red-600 font-bold">2 3 5</td></tr>
-                            <tr><td>P1</td><td>2 0 3</td><td>4 2 5</td><td class="text-blue-600 font-bold">2 2 2</td></tr>
-                            <tr><td>P2</td><td>0 3 1</td><td>1 3 3</td><td class="text-blue-600 font-bold">1 0 2</td></tr>
-                            <tr><td>P3</td><td>3 0 2</td><td>5 1 4</td><td class="text-blue-600 font-bold">2 1 2</td></tr>
-                            <tr><td>P4</td><td>0 0 4</td><td>2 3 5</td><td class="text-blue-600 font-bold">2 3 1</td></tr>
-                        </table>
-                    </div>
-                    <p class="text-lg text-gray-700">
-                        (1) 当 Available (x,y,z) 取 <strong>2, 2, 3</strong> 时，系统是否安全？<br>
-                        (2) 当 Available (x,y,z) 取 <strong>1, 1, 2</strong> 时，系统是否安全？
-                    </p>
-                </div>
+            <p class="red-pen mt-2">
+                <strong>分析步骤：</strong><br>
+                1. 0ms: P1 到达并运行。<br>
+                2. 50ms: P1 转入 I/O。CPU 空闲，P2 (10ms已到) 立即上 CPU 运行。<br>
+                3. 120ms: P1 I/O 完成，申请 CPU，但 P2 (需100ms) 还在运行，P1 等待。<br>
+                4. 150ms: P2 CPU 突发完成，转入 I/O。CPU 空闲，P1 立即上 CPU。<br>
+                5. 180ms: P1 完成全部任务 (Exit)。<br>
+                6. 190ms: P2 I/O 完成，申请 CPU。此时 CPU 空闲 (180-190)，P2 立即运行。<br>
+                7. 220ms: P2 完成。<br>
+                <br>
+                <strong>结论：</strong><br>
+                完成所需最少时间 = <strong>220ms</strong>
+            </p>
 
-                <!-- 银行家算法模拟器 -->
-                <div class="sim-box">
-                    <div class="flex gap-4 mb-4">
-                        <div>
-                            <label class="text-xs text-gray-500 block">A (x)</label>
-                            <input type="number" id="ba-x" class="w-16 border rounded px-2 py-1 text-center" value="2">
-                        </div>
-                        <div>
-                            <label class="text-xs text-gray-500 block">B (y)</label>
-                            <input type="number" id="ba-y" class="w-16 border rounded px-2 py-1 text-center" value="2">
-                        </div>
-                        <div>
-                            <label class="text-xs text-gray-500 block">C (z)</label>
-                            <input type="number" id="ba-z" class="w-16 border rounded px-2 py-1 text-center" value="3">
-                        </div>
-                        <button onclick="runBanker()" class="ml-auto bg-indigo-600 text-white px-4 py-1 rounded text-sm shadow hover:bg-indigo-700">检测安全性</button>
-                    </div>
-                    <div id="ba-result" class="text-sm font-code bg-gray-50 p-2 rounded border h-32 overflow-y-auto">
-                        点击检测以查看结果...
-                    </div>
-                </div>
+            <p class="red-pen mt-4"><strong>(2) CPU 空闲与利用率</strong></p>
+            <p class="red-pen">
+                CPU 空闲时间段：<strong>180ms ~ 190ms</strong> (共 10ms)。<br>
+                <span class="red-note">注：此时 P1 已结束，P2 正在做 I/O，无进程需 CPU。</span><br>
+                CPU 利用率 = (总时间 - 空闲时间) / 总时间<br>
+                = (220 - 10) / 220 ≈ <strong>95.45%</strong>
+            </p>
+        </div>
+    </div>
 
-                <div class="answer-area font-hand text-2xl ink-blue">
-                    <p><strong>(1) 当 Available = (2, 2, 3) 时：</strong></p>
-                    <ul class="list-disc pl-6 text-xl">
-                        <li>P2 Need(1,0,2) ≤ (2,2,3) -> Run P2. Avail = 2,2,3 + 0,3,1 = <strong>2,5,4</strong></li>
-                        <li>P1 Need(2,2,2) ≤ (2,5,4) -> Run P1. Avail = 2,5,4 + 2,0,3 = <strong>4,5,7</strong></li>
-                        <li>P3 Need(2,1,2) ≤ (4,5,7) -> Run P3. Avail = 4,5,7 + 3,0,2 = <strong>7,5,9</strong></li>
-                        <li>P4 Need(2,3,1) ≤ (7,5,9) -> Run P4. Avail = 7,5,9 + 0,0,4 = <strong>7,5,13</strong></li>
-                        <li>P0 Need(2,3,5) ≤ (7,5,13) -> Run P0. Finish.</li>
-                    </ul>
-                    <p class="text-green-600 pl-6 mt-1">∴ 系统安全，安全序列如：P2, P1, P3, P4, P0。</p>
-                    
-                    <p class="mt-4"><strong>(2) 当 Available = (1, 1, 2) 时：</strong></p>
-                    <ul class="list-disc pl-6 text-xl">
-                        <li>只有 P2 Need(1,0,2) ≤ (1,1,2)。运行 P2，释放后 Avail = 1,1,2 + 0,3,1 = <strong>1,4,3</strong>。</li>
-                        <li>此时剩余进程需求：P0(2,3,5), P1(2,2,2), P3(2,1,2), P4(2,3,1)。</li>
-                        <li>检查资源 A：所有剩余进程 Need[A]=2，而 Avail[A]=1。</li>
-                        <li>无法满足任何进程的 A 资源需求。</li>
-                    </ul>
-                    <p class="text-red-600 pl-6 mt-1">∴ 系统不安全，发生死锁。</p>
-                </div>
-            </div>
-        </section>
+    <hr class="border-gray-300 my-6">
 
-        <!-- 题目 4 -->
-        <section id="q4" class="mb-16">
-            <div class="paper-sheet p-8 md:pl-24 md:pr-12 rounded transform transition hover:rotate-0 md:rotate-1">
-                <div class="absolute top-6 right-6 text-gray-400 font-hand opacity-50 text-2xl">Q4</div>
-                
-                <div class="mb-6">
-                    <h3 class="text-xl font-bold text-gray-900 mb-4 border-l-4 border-indigo-500 pl-3">
-                        4. 分页存储地址转换
-                    </h3>
-                    <p class="text-lg text-gray-700">
-                        某分页系统内存容量 128KB，页面大小 <strong>2KB</strong>。一个 5 页大的作业，页表如下：<br>
-                        0页→3块, 1页→5块, 2页→8块, 3页→10块, 4页→12块。<br>
-                        请将逻辑地址 <strong>3500B</strong> 和 <strong>11000B</strong> 转换为物理地址。
-                    </p>
-                </div>
-
-                <div class="answer-area font-hand text-2xl ink-blue">
-                    <p><strong>已知：</strong> 页面大小 L = 2KB = 2048 B。</p>
-                    
-                    <div class="mt-4 border-l-2 border-gray-400 pl-4">
-                        <p class="mb-2"><strong>(1) 逻辑地址 3500：</strong></p>
-                        <p>页号 P = int(3500 / 2048) = <strong class="text-red-600">1</strong></p>
-                        <p>页内偏移 W = 3500 mod 2048 = <strong class="text-red-600">1452</strong></p>
-                        <p>查页表：页号 1 对应块号 <strong>5</strong>。</p>
-                        <p>物理地址 = 块号 × 页面大小 + 偏移量</p>
-                        <p class="pl-12">= 5 × 2048 + 1452 = 10240 + 1452 = <strong class="text-red-600 border-b-2 border-red-500">11692 B</strong></p>
-                    </div>
-
-                    <div class="mt-4 border-l-2 border-gray-400 pl-4">
-                        <p class="mb-2"><strong>(2) 逻辑地址 11000：</strong></p>
-                        <p>页号 P = int(11000 / 2048) = <strong class="text-red-600">5</strong></p>
-                        <p>作业只有 5 页 (页号 0~4)。</p>
-                        <p>∵ 页号 5 > 最大页号 4</p>
-                        <p class="text-red-600 font-bold">∴ 产生越界中断 (地址非法)。</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 题目 5 -->
-        <section id="q5" class="mb-16">
-            <div class="paper-sheet p-8 md:pl-24 md:pr-12 rounded transform transition hover:rotate-0 md:-rotate-1">
-                <div class="absolute top-6 right-6 text-gray-400 font-hand opacity-50 text-2xl">Q5</div>
-                
-                <div class="mb-6">
-                    <h3 class="text-xl font-bold text-gray-900 mb-4 border-l-4 border-indigo-500 pl-3">
-                        5. LRU 页面置换算法
-                    </h3>
-                    <p class="text-lg text-gray-700">
-                        页面访问序列：<span class="font-mono bg-white px-2 border rounded">1, 3, 2, 1, 0, 3, 4, 3, 0, 2</span>。<br>
-                        分配给该进程 <strong>3</strong> 个物理块，第 1 页已预装入内存。求 LRU 算法下的置换次数、淘汰页面序列及缺页率。
-                    </p>
-                </div>
-
-                <!-- LRU 模拟器 -->
-                <div class="sim-box overflow-x-auto">
-                    <table class="w-full text-center text-xs md:text-sm border-collapse" id="lru-table">
-                        <!-- JS 填充 -->
-                    </table>
-                    <div class="text-center mt-4">
-                        <button onclick="runLRU()" class="bg-green-600 text-white px-4 py-1 rounded text-sm shadow hover:bg-green-700">演示 LRU 过程</button>
-                    </div>
-                </div>
-
-                <div class="answer-area font-hand text-2xl ink-blue">
-                    <p><strong>分析结果：</strong></p>
-                    <ul class="list-disc pl-6">
-                        <li><strong>缺页次数：</strong> 6 次 (访问 1, 3, 2, 0, 4, 2 时缺页)。</li>
-                        <li><strong>置换次数：</strong> <span class="text-red-600 font-bold">4 次</span> (因为前2次缺页有空闲块)。</li>
-                        <li><strong>淘汰序列：</strong>
-                            <span class="font-mono text-xl">
-                                3 (换0), 2 (换3), 1 (换4), 4 (换2)
-                            </span>
-                            <br><span class="text-sm text-gray-500 ink-red">*注：这里的“3”指当时内存中LRU是2(1,3,2状态下)，等等。具体看上方模拟表。准确应为：淘汰2, 1, 0, 4 (视初始状态假设)。</span>
-                            <br><span class="text-red-600 text-lg">修正：根据题目序列 1,3,2,1,0,3,4...</span><br>
-                            <span class="text-base text-gray-600">
-                            [1] -> [1,3] -> [1,3,2] -> [1,3,2](hit 1) -> [1,3,0](换2? 不, 2是最近最久? 1刚用, 3较久, 2最久? 序列是 1,3,2,1。访问0时，历史是 2,3,1(1最新)。故淘汰3? 不，顺序是1(t-3),3(t-2),2(t-1),1(t)。栈底是3。淘汰3。)
-                            </span>
-                        </li>
-                        <li><strong>缺页率：</strong> 6 / 10 = <strong class="text-red-600">60%</strong>。</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- 题目 8 -->
-        <section id="q8" class="mb-16">
-            <div class="paper-sheet p-8 md:pl-24 md:pr-12 rounded transform transition hover:rotate-0 md:rotate-1">
-                <div class="absolute top-6 right-6 text-gray-400 font-hand opacity-50 text-2xl">Q8</div>
-                
-                <div class="mb-6">
-                    <h3 class="text-xl font-bold text-gray-900 mb-4 border-l-4 border-indigo-500 pl-3">
-                        8. SSTF 磁盘调度
-                    </h3>
-                    <p class="text-lg text-gray-700">
-                        当前磁头：<strong>120</strong>。<br>
-                        请求队列：90, 150, 80, 160, 70, 180, 60, 200, 50, 190。<br>
-                        使用 SSTF (最短寻道时间优先) 算法，写出访问顺序、每次移动距离、平均移动磁道数。
-                    </p>
-                </div>
-
-                <!-- 磁盘调度图 -->
-                <div class="sim-box">
-                    <div class="h-32 relative border-b border-gray-300 mb-6 flex items-end px-4" id="disk-track">
-                        <!-- Track Line -->
-                        <div class="absolute bottom-0 left-0 w-full h-1 bg-gray-300"></div>
-                        <!-- Points will be injected by JS -->
-                    </div>
-                    <div class="text-center">
-                        <button onclick="runSSTF()" class="bg-blue-600 text-white px-4 py-1 rounded text-sm shadow hover:bg-blue-700">生成寻道路径</button>
-                    </div>
-                </div>
-
-                <div class="answer-area font-hand text-2xl ink-blue">
-                    <p><strong>访问顺序：</strong></p>
-                    <p class="font-code text-lg text-gray-800 mb-2 break-words">
-                        120 &rarr; 90(30) &rarr; 80(10) &rarr; 70(10) &rarr; 60(10) &rarr; 50(10) &rarr; 150(100) &rarr; 160(10) &rarr; 180(20) &rarr; 190(10) &rarr; 200(10)
-                    </p>
-                    <p><strong>移动距离总和：</strong></p>
-                    <p>30 + 10 + 10 + 10 + 10 + 100 + 10 + 20 + 10 + 10 = <strong class="text-red-600">220</strong></p>
-                    <p><strong>平均移动磁道数：</strong></p>
-                    <p>220 / 10 = <strong class="text-red-600">22</strong></p>
-                </div>
-            </div>
-        </section>
-
-        <!-- 题目 9 -->
-        <section id="q9" class="mb-16">
-            <div class="paper-sheet p-8 md:pl-24 md:pr-12 rounded transform transition hover:rotate-0 md:-rotate-1">
-                <div class="absolute top-6 right-6 text-gray-400 font-hand opacity-50 text-2xl">Q9</div>
-                
-                <div class="mb-6">
-                    <h3 class="text-xl font-bold text-gray-900 mb-4 border-l-4 border-indigo-500 pl-3">
-                        9. PV 操作 (货架问题)
-                    </h3>
-                    <p class="text-lg text-gray-700">
-                        某仓库有一个货架，最多可存放 <strong>3</strong> 个货物。<br>
-                        工人 A 放货 (每次 1 个)，工人 B 取货 (每次 1 个)。<br>
-                        规则：满不放，空不取，互斥访问。<br>
-                        请定义信号量并写出 PV 操作逻辑。
-                    </p>
-                </div>
-
-                <div class="sim-box flex justify-center gap-8 items-center bg-gray-50">
-                    <div class="text-center">
-                        <div class="text-sm font-bold mb-1">工人 A</div>
-                        <div class="text-4xl">👷‍♂️</div>
-                    </div>
-                    <div class="flex gap-2 p-4 bg-white rounded border border-gray-300 shadow-inner" id="shelf-display">
-                        <div class="w-10 h-10 border-2 border-dashed border-gray-400 rounded flex items-center justify-center text-gray-300">1</div>
-                        <div class="w-10 h-10 border-2 border-dashed border-gray-400 rounded flex items-center justify-center text-gray-300">2</div>
-                        <div class="w-10 h-10 border-2 border-dashed border-gray-400 rounded flex items-center justify-center text-gray-300">3</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-sm font-bold mb-1">工人 B</div>
-                        <div class="text-4xl">🙋‍♂️</div>
-                    </div>
-                </div>
-                <div class="text-center mt-2 mb-4">
-                    <button onclick="pvSim.put()" class="bg-green-600 text-white px-3 py-1 rounded text-xs mr-2 hover:bg-green-700">A 放货</button>
-                    <button onclick="pvSim.take()" class="bg-orange-600 text-white px-3 py-1 rounded text-xs hover:bg-orange-700">B 取货</button>
-                    <p id="pv-status" class="text-xs text-red-500 mt-1 h-4"></p>
-                </div>
-
-                <div class="answer-area font-hand text-xl ink-blue grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="border-r border-gray-300 pr-4">
-                        <p class="font-bold mb-2 text-black">信号量定义：</p>
-                        <ul class="list-none font-code text-sm">
-                            <li>semaphore mutex = 1; // 互斥</li>
-                            <li>semaphore empty = 3; // 空位</li>
-                            <li>semaphore full = 0;  // 货物</li>
-                        </ul>
-                        
-                        <p class="font-bold mt-4 mb-2 text-black">工人 A (放货)：</p>
-                        <pre class="bg-white/50 p-2 rounded border text-sm font-code">
-while(1) {
-    produce();
-    P(empty);
-    P(mutex);
-    put();
-    V(mutex);
-    V(full);
-}</pre>
-                    </div>
-                    <div class="pl-2">
-                        <p class="font-bold mb-2 text-black">工人 B (取货)：</p>
-                        <pre class="bg-white/50 p-2 rounded border text-sm font-code">
-while(1) {
-    P(full);
-    P(mutex);
-    take();
-    V(mutex);
-    V(empty);
-    consume();
-}</pre>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <div class="text-center text-gray-400 text-xs py-8">
-            — End of Review Paper —
+    <!-- Q3: Banker's Algorithm -->
+    <div class="mb-10 page-break-inside-avoid">
+        <h3 class="text-lg font-bold mb-3 border-l-4 border-gray-800 pl-3">三、银行家算法 (来源: 3.jpg)</h3>
+        <div class="p-4 bg-gray-50 rounded mb-4 text-sm">
+            <p>5个进程 P0-P4，资源 A, B, C。Alloc 和 Max 已知。</p>
+            <p>(1) 当 Avaiable (x,y,z) = (2,2,3) 时，系统是否安全？<br>
+               (2) 当 Avaiable (x,y,z) = (1,1,2) 时，系统是否安全？</p>
         </div>
 
-    </main>
+        <div class="answer-block">
+            <p class="red-pen"><strong>解：首先计算需求矩阵 Need = Max - Allocation</strong></p>
+            <table class="ans-table" style="width: 60%; margin: 0 auto;">
+                <tr><th>进程</th><th>Alloc</th><th>Max</th><th>Need (M-A)</th></tr>
+                <tr><td>P0</td><td>1 1 2</td><td>3 4 7</td><td><strong>2 3 5</strong></td></tr>
+                <tr><td>P1</td><td>2 0 3</td><td>4 2 5</td><td><strong>2 2 2</strong></td></tr>
+                <tr><td>P2</td><td>0 3 1</td><td>1 3 3</td><td><strong>1 0 2</strong></td></tr>
+                <tr><td>P3</td><td>3 0 2</td><td>5 1 4</td><td><strong>2 1 2</strong></td></tr>
+                <tr><td>P4</td><td>0 0 4</td><td>2 3 5</td><td><strong>2 3 1</strong></td></tr>
+            </table>
 
-    <!-- JavaScript 逻辑合集 -->
-    <script>
-        // --- 全局控制 ---
-        function toggleAnswers() {
-            const areas = document.querySelectorAll('.answer-area');
-            const btnText = document.getElementById('toggle-text');
-            let isHidden = false;
-            
-            areas.forEach(area => {
-                if (area.classList.contains('hidden-ans')) {
-                    area.classList.remove('hidden-ans');
-                    isHidden = false;
-                } else {
-                    area.classList.add('hidden-ans');
-                    isHidden = true;
-                }
-            });
-            
-            btnText.textContent = isHidden ? "显示答案" : "隐藏答案";
-        }
+            <p class="red-pen mt-4"><strong>(1) 当 Available = (2, 2, 3)</strong></p>
+            <p class="red-pen">尝试寻找安全序列：</p>
+            <ul class="red-pen list-decimal pl-6 text-sm">
+                <li>检查 <strong>P2</strong>: Need(1,0,2) ≤ Avail(2,2,3) <span class="tick">√</span>。<br>
+                    执行 P2，回收 Alloc(0,3,1)。<br>
+                    New Avail = (2,2,3) + (0,3,1) = <strong>(2, 5, 4)</strong></li>
+                <li>检查 <strong>P1</strong>: Need(2,2,2) ≤ Avail(2,5,4) <span class="tick">√</span>。<br>
+                    回收 Alloc(2,0,3)。New Avail = <strong>(4, 5, 7)</strong></li>
+                <li>检查 <strong>P3</strong>: Need(2,1,2) ≤ Avail(4,5,7) <span class="tick">√</span>。<br>
+                    回收 Alloc(3,0,2)。New Avail = <strong>(7, 5, 9)</strong></li>
+                <li>检查 <strong>P4</strong>: Need(2,3,1) ≤ Avail(7,5,9) <span class="tick">√</span>。<br>
+                    回收 ... OK</li>
+                <li>检查 <strong>P0</strong> ... OK</li>
+            </ul>
+            <p class="red-pen mt-2"><strong>结论：系统处于安全状态。</strong><br>
+            存在安全序列：P2 → P1 → P3 → P4 → P0 (答案不唯一)。</p>
 
-        // --- Q1 Gantt Chart Sim ---
-        const q1Data = [
-            { type: 'P1', start: 0, width: 50, color: 'bg-blue-200' },
-            { type: 'P2', start: 50, width: 100, color: 'bg-green-200' },
-            { type: 'P1', start: 150, width: 30, color: 'bg-blue-300' }, // P1 finishes compute
-            { type: 'P2', start: 200, width: 30, color: 'bg-green-300' }, // P2 finishes compute
-            { type: 'Wait', start: 180, width: 20, color: 'bg-red-100 diagonal-stripe' } // CPU Idle
-        ];
-        
-        function renderQ1() {
-            const container = document.getElementById('chart-q1');
-            const scale = 2; // 1ms = 2px
-            let html = `<div class="relative h-16 bg-gray-50 border-b border-gray-200 mb-6" style="width: ${250 * scale}px">`;
-            
-            // Draw Timeline Axis
-            for(let i=0; i<=230; i+=50) {
-                html += `<div class="absolute top-0 bottom-0 border-l border-gray-300 text-xs text-gray-400 pl-1" style="left: ${i*scale}px; pointer-events:none;">${i}</div>`;
-            }
-            // End mark
-            html += `<div class="absolute top-0 bottom-0 border-l border-gray-300 text-xs text-gray-400 pl-1" style="left: ${230*scale}px; pointer-events:none;">230</div>`;
+            <p class="red-pen mt-4"><strong>(2) 当 Available = (1, 1, 2)</strong></p>
+            <ul class="red-pen list-decimal pl-6 text-sm">
+                <li>检查 <strong>P2</strong>: Need(1,0,2) ≤ (1,1,2) <span class="tick">√</span>。<br>
+                    回收 P2。New Avail = (1,1,2) + (0,3,1) = <strong>(1, 4, 3)</strong></li>
+                <li>此时剩余进程 Need:
+                    <br>P0(2,3,5) - A资源不足(2>1)
+                    <br>P1(2,2,2) - A资源不足(2>1)
+                    <br>P3(2,1,2) - A资源不足(2>1)
+                    <br>P4(2,3,1) - A资源不足(2>1)
+                </li>
+                <li>无法找到下一个可执行进程。</li>
+            </ul>
+            <p class="red-pen mt-2"><strong>结论：系统处于不安全状态，可能发生死锁。</strong></p>
+        </div>
+    </div>
 
-            // Draw Blocks
-            q1Data.forEach(b => {
-                html += `<div class="absolute top-2 h-8 ${b.color} border border-gray-400 rounded flex items-center justify-center text-xs font-bold text-gray-700 shadow-sm hover:shadow-md transition-all cursor-pointer" 
-                          style="left: ${b.start * scale}px; width: ${b.width * scale}px;" title="${b.type}: ${b.width}ms">
-                          ${b.type}
-                         </div>`;
-            });
-            
-            html += `</div>`;
-            container.innerHTML = html;
-        }
+    <!-- Q4: Paging Address Translation -->
+    <div class="mb-10 page-break-inside-avoid">
+        <h3 class="text-lg font-bold mb-3 border-l-4 border-gray-800 pl-3">四、分页地址转换 (来源: 4.jpg)</h3>
+        <div class="p-4 bg-gray-50 rounded mb-4 text-sm">
+            <p>内存 128KB, 页面大小 2KB。页表：0→3, 1→5, 2→8, 3→10, 4→12。</p>
+            <p>将逻辑地址 3500B、11000B 转换为物理地址。</p>
+        </div>
 
-        // --- Q3 Banker's Algo ---
-        function runBanker() {
-            const avail = [
-                parseInt(document.getElementById('ba-x').value),
-                parseInt(document.getElementById('ba-y').value),
-                parseInt(document.getElementById('ba-z').value)
-            ];
-            const need = [
-                [2,3,5], [2,2,2], [1,0,2], [2,1,2], [2,3,1]
-            ];
-            const alloc = [
-                [1,1,2], [2,0,3], [0,3,1], [3,0,2], [0,0,4]
-            ];
-            
-            let work = [...avail];
-            let finish = [false, false, false, false, false];
-            let safeSeq = [];
-            let log = "";
+        <div class="answer-block">
+            <p class="red-pen"><strong>基础参数：</strong><br>
+               页面大小 L = 2KB = 2048 B。<br>
+               页号 P = INT(逻辑地址 / L)<br>
+               页内偏移 W = 逻辑地址 % L</p>
 
-            for(let count=0; count<5; count++) {
-                let found = false;
-                for(let i=0; i<5; i++) {
-                    if(!finish[i]) {
-                        if(need[i][0] <= work[0] && need[i][1] <= work[1] && need[i][2] <= work[2]) {
-                            work[0] += alloc[i][0];
-                            work[1] += alloc[i][1];
-                            work[2] += alloc[i][2];
-                            finish[i] = true;
-                            safeSeq.push(`P${i}`);
-                            found = true;
-                            log += `<div>✅ P${i} 执行 (Need ${need[i]} <= Work). Work变为 ${work}</div>`;
-                        }
-                    }
-                }
-                if(!found) break;
-            }
+            <div class="mt-4">
+                <p class="red-pen"><strong>1. 逻辑地址 3500B</strong></p>
+                <div class="ml-4 red-pen text-sm">
+                    P = 3500 / 2048 = 1<br>
+                    W = 3500 % 2048 = 1452<br>
+                    查表：页号 1 对应的块号(物理页框)为 <strong>5</strong>。<br>
+                    物理地址 = 块号 × 页面大小 + 偏移<br>
+                    = 5 × 2048 + 1452 = 10240 + 1452 = <strong>11692 B</strong>
+                </div>
+            </div>
 
-            const resultBox = document.getElementById('ba-result');
-            if(safeSeq.length === 5) {
-                resultBox.innerHTML = `<div class='text-green-600 font-bold mb-1'>系统安全!</div>` + log + `<div class='mt-1 border-t'>安全序列: ${safeSeq.join(' -> ')}</div>`;
-            } else {
-                resultBox.innerHTML = `<div class='text-red-600 font-bold mb-1'>系统不安全 (死锁)!</div>` + log + `<div class='mt-1 text-gray-500'>无法满足剩余进程需求。</div>`;
-            }
-        }
+            <div class="mt-4">
+                <p class="red-pen"><strong>2. 逻辑地址 11000B</strong></p>
+                <div class="ml-4 red-pen text-sm">
+                    P = 11000 / 2048 = 5 (取整)<br>
+                    W = 11000 % 2048 = 760<br>
+                    查表：页表仅给出了 0, 1, 2, 3, 4 页的映射。<br>
+                    <strong>页号 5 超出页表长度(或未在内存中)。</strong><br>
+                    <span class="red-note">注：考试中若未给出页表长度寄存器(PTR)，通常视为越界中断或缺页中断。若仅考察计算，需注明“该页不在页表中，发生缺页/越界”。</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        // --- Q5 LRU Sim ---
-        function runLRU() {
-            const seq = [1,3,2,1,0,3,4,3,0,2];
-            const table = document.getElementById('lru-table');
-            let html = `<thead><tr class="bg-gray-100"><th class="p-1 border">Seq</th>`;
-            seq.forEach(n => html += `<th class="p-1 border w-8">${n}</th>`);
-            html += `</tr></thead><tbody>`;
-            
-            // Simulation logic
-            let frames = [1, null, null]; // Initial: 1 loaded
-            let history = [1]; // Track recent usage for LRU logic approximation
-            
-            // Simple visual generation (not full LRU logic for brevity, hardcoded for demo based on problem)
-            // Actually, let's do simple logic
-            let stack = [1]; // Top is most recent
-            
-            let rows = [[], [], [], []]; // B1, B2, B3, Status
-            
-            // Pre-fill for initial state (treated as step 0 kinda)
-            // Let's run the loop
-            let currentFrames = [1, null, null];
-            
-            // LRU helper: find frame with val that appears furthest back in 'past'
-            // But standard LRU Stack: Access -> Move to top. Replace -> Remove bottom.
-            // Let's use a frame-based history.
-            
-            // Re-simulating specifically for the visual table
-            // This is tricky to render perfectly without a lot of code, so I will render the Key Steps.
-            // Sequence: 1, 3, 2, 1, 0, 3, 4, 3, 0, 2
-            
-            // Manual trace to ensure visual matches answer
-            const states = [
-                {f:[1,null,null], s:'Hit'}, // 1
-                {f:[1,3,null], s:'Miss'},   // 3
-                {f:[1,3,2], s:'Miss'},      // 2
-                {f:[1,3,2], s:'Hit'},       // 1 (1 is now recent)
-                {f:[1,0,2], s:'Rep 3'},     // 0 (3 is oldest. Wait. 1 used at t3. 2 used at t2. 3 used at t1. So 3 replaced. Correct.)
-                {f:[1,0,3], s:'Rep 2'},     // 3 (0 used t4, 1 used t3, 2 used t2. Replace 2.)
-                {f:[4,0,3], s:'Rep 1'},     // 4 (3 used t5, 0 used t4, 1 used t3. Replace 1.)
-                {f:[4,0,3], s:'Hit'},       // 3
-                {f:[4,0,3], s:'Hit'},       // 0
-                {f:[4,2,3], s:'Rep 0? No'}, // 2. History: 0(t8), 3(t7), 4(t6). 4 is oldest. Replace 4?
-                                            // Let's re-verify carefully.
-                                            // Seq: 1, 3, 2, 1, 0, 3, 4, 3, 0, 2
-                                            // Stack (Right=Recent):
-                                            // [1]
-                                            // [1,3]
-                                            // [1,3,2]
-                                            // [3,2,1] (Hit 1)
-                                            // [2,1,0] (Rep 3) -> Frames: 1,0,2
-                                            // [1,0,3] (Rep 2) -> Frames: 1,0,3
-                                            // [0,3,4] (Rep 1) -> Frames: 4,0,3
-                                            // [0,4,3] (Hit 3)
-                                            // [4,3,0] (Hit 0)
-                                            // [3,0,2] (Rep 4) -> Frames: 2,0,3
-            ];
-            
-            // Generate HTML from 'states' (simplified)
-            // Row 1 (Block 1)
-            let r1 = `<tr class="border-b"><td class="font-bold bg-gray-50">B1</td>`;
-            states.forEach(st => r1 += `<td class="border p-1">${st.f[0]!==null?st.f[0]:''}</td>`);
-            r1 += `</tr>`;
-            
-            let r2 = `<tr class="border-b"><td class="font-bold bg-gray-50">B2</td>`;
-            states.forEach(st => r2 += `<td class="border p-1">${st.f[1]!==null?st.f[1]:''}</td>`);
-            r2 += `</tr>`;
-            
-            let r3 = `<tr class="border-b"><td class="font-bold bg-gray-50">B3</td>`;
-            states.forEach(st => r3 += `<td class="border p-1">${st.f[2]!==null?st.f[2]:''}</td>`);
-            r3 += `</tr>`;
-            
-            let r4 = `<tr><td class="text-xs text-gray-500">Stat</td>`;
-            states.forEach(st => {
-                let color = st.s.includes('Hit') ? 'text-green-600' : (st.s.includes('Rep') ? 'text-red-500' : 'text-blue-500');
-                r4 += `<td class="border p-1 text-xs font-bold ${color}">${st.s}</td>`
-            });
-            r4 += `</tr>`;
-            
-            table.innerHTML = html + r1 + r2 + r3 + r4 + `</tbody>`;
-        }
+    <hr class="border-gray-300 my-6">
 
-        // --- Q8 SSTF Sim ---
-        function runSSTF() {
-            const start = 120;
-            const reqs = [90, 150, 80, 160, 70, 180, 60, 200, 50, 190];
-            const path = [120, 90, 80, 70, 60, 50, 150, 160, 180, 190, 200]; // Solved path
-            
-            const container = document.getElementById('disk-track');
-            // Clear old points
-            container.querySelectorAll('.disk-point').forEach(e => e.remove());
-            
-            // Draw points
-            const width = container.offsetWidth;
-            const max = 200;
-            
-            path.forEach((p, i) => {
-                const left = (p / max) * (width - 20); // Padding
-                const div = document.createElement('div');
-                div.className = 'disk-point absolute w-3 h-3 bg-blue-500 rounded-full border border-white shadow';
-                div.style.left = `${left}px`;
-                div.style.bottom = `${(i * 5) + 5}px`; // Stack them slightly
-                div.title = `Step ${i}: ${p}`;
-                
-                // Add label for start
-                if(i===0) {
-                    div.classList.add('bg-red-500', 'z-10');
-                    const label = document.createElement('div');
-                    label.textContent = "Start 120";
-                    label.className = "absolute -top-6 left-0 text-xs text-red-500 font-bold whitespace-nowrap";
-                    div.appendChild(label);
-                }
-                
-                container.appendChild(div);
-            });
-        }
+    <!-- Q5: LRU Page Replacement -->
+    <div class="mb-10 page-break-inside-avoid">
+        <h3 class="text-lg font-bold mb-3 border-l-4 border-gray-800 pl-3">五、页面置换算法 LRU (来源: 56.jpg)</h3>
+        <div class="p-4 bg-gray-50 rounded mb-4 text-sm">
+            <p>访问序列：1, 3, 2, 1, 0, 3, 4, 3, 0, 2<br>
+               物理块数：3。<strong>条件：第1页已被装入。</strong><br>
+               求：依次淘汰的页号？缺页中断率？</p>
+        </div>
 
-        // --- Q9 PV Sim ---
-        const pvSim = {
-            shelf: [0,0,0],
-            mutex: false,
-            render: function() {
-                const els = document.getElementById('shelf-display').children;
-                for(let i=0; i<3; i++) {
-                    if(this.shelf[i]) {
-                        els[i].innerHTML = "📦";
-                        els[i].classList.add("bg-blue-100", "border-blue-500");
-                    } else {
-                        els[i].innerHTML = i+1;
-                        els[i].classList.remove("bg-blue-100", "border-blue-500");
-                    }
-                }
-            },
-            put: function() {
-                const emptyIdx = this.shelf.indexOf(0);
-                const status = document.getElementById('pv-status');
-                if(emptyIdx !== -1) {
-                    this.shelf[emptyIdx] = 1;
-                    status.textContent = "A 放货成功";
-                    status.className = "text-xs text-green-600 mt-1 h-4 font-bold";
-                    this.render();
-                } else {
-                    status.textContent = "货架满！A 等待";
-                    status.className = "text-xs text-red-500 mt-1 h-4 font-bold";
-                }
-            },
-            take: function() {
-                const fullIdx = this.shelf.lastIndexOf(1);
-                const status = document.getElementById('pv-status');
-                if(fullIdx !== -1) {
-                    this.shelf[fullIdx] = 0;
-                    status.textContent = "B 取货成功";
-                    status.className = "text-xs text-orange-600 mt-1 h-4 font-bold";
-                    this.render();
-                } else {
-                    status.textContent = "货架空！B 等待";
-                    status.className = "text-xs text-red-500 mt-1 h-4 font-bold";
-                }
-            }
-        };
+        <div class="answer-block">
+            <p class="red-pen"><strong>解：使用 LRU (最近最久未使用) 算法</strong></p>
+            <p class="red-note text-sm">规则：当内存满时，淘汰那个“最后一次访问时间距离现在最远”的页面。</p>
+            
+            <table class="ans-table text-sm">
+                <tr>
+                    <th width="10%">访问</th>
+                    <th width="30%">内存栈 (最新→最久)</th>
+                    <th width="20%">缺页?</th>
+                    <th width="20%">淘汰页</th>
+                </tr>
+                <tr><td>(初始)</td><td>[1]</td><td>-</td><td>-</td></tr>
+                <tr><td>1</td><td>[1]</td><td>命中</td><td>-</td></tr>
+                <tr><td>3</td><td>[3, 1]</td><td>√</td><td>-</td></tr>
+                <tr><td>2</td><td>[2, 3, 1] (满)</td><td>√</td><td>-</td></tr>
+                <tr><td>1</td><td>[1, 2, 3]</td><td>命中</td><td>-</td></tr>
+                <tr><td>0</td><td>[0, 1, 2]</td><td>√</td><td><strong>3</strong></td></tr>
+                <tr><td>3</td><td>[3, 0, 1]</td><td>√</td><td><strong>2</strong></td></tr>
+                <tr><td>4</td><td>[4, 3, 0]</td><td>√</td><td><strong>1</strong></td></tr>
+                <tr><td>3</td><td>[3, 4, 0]</td><td>命中</td><td>-</td></tr>
+                <tr><td>0</td><td>[0, 3, 4]</td><td>命中</td><td>-</td></tr>
+                <tr><td>2</td><td>[2, 0, 3]</td><td>√</td><td><strong>4</strong></td></tr>
+            </table>
 
-        // Init
-        window.onload = function() {
-            renderQ1();
-            // Init toggle state
-            toggleAnswers(); // Hide by default
-        };
-    </script>
+            <p class="red-pen mt-4">
+                <strong>1. 依次淘汰的页号：</strong> 3, 2, 1, 4<br>
+                <strong>2. 缺页次数：</strong> 6次 (初始1页已在，后续3,2,0,3,4,2触发缺页)<br>
+                <strong>3. 缺页中断率：</strong> 6 / 10 = <strong>60%</strong>
+            </p>
+            <p class="red-note text-xs">注意：题目说“第1页已装入”，所以序列第一个“1”算命中，不产生缺页。</p>
+        </div>
+    </div>
+
+    <!-- Q8: Disk Scheduling -->
+    <div class="mb-10 page-break-inside-avoid">
+        <h3 class="text-lg font-bold mb-3 border-l-4 border-gray-800 pl-3">八、磁盘调度 SSTF (来源: 678.jpg)</h3>
+        <div class="p-4 bg-gray-50 rounded mb-4 text-sm">
+            <p>序列：90, 150, 80, 160, 70, 180, 60, 200, 50, 190<br>
+               当前磁头：120。算法：SSTF (最短寻道时间优先)。</p>
+        </div>
+
+        <div class="answer-block">
+            <p class="red-pen"><strong>解：SSTF 策略是每次找离当前磁头最近的磁道。</strong></p>
+            
+            <div class="font-mono text-sm bg-white p-2 border border-red-200 rounded">
+                Start: 120<br>
+                待访问: {50,60,70,80,90, 150,160,180,190,200}<br>
+                <br>
+                1. 当前120 -> 找最近 -> 90 (距30) 或 150 (距30)。<br>
+                <span class="red-note text-xs">注：通常双向距离相等时，可任选。此处依据贪心趋势，若选90则后续密集，通常更优。设选 90。</span><br>
+                2. 90 -> 80 (距10)<br>
+                3. 80 -> 70 (距10)<br>
+                4. 70 -> 60 (距10)<br>
+                5. 60 -> 50 (距10) [小端处理完，当前在50]<br>
+                6. 50 -> 150 (距100)<br>
+                7. 150 -> 160 (距10)<br>
+                8. 160 -> 180 (距20)<br>
+                9. 180 -> 190 (距10)<br>
+                10. 190 -> 200 (距10)<br>
+            </div>
+
+            <p class="red-pen mt-3">
+                <strong>1. 访问顺序：</strong><br>
+                120 → 90 → 80 → 70 → 60 → 50 → 150 → 160 → 180 → 190 → 200<br>
+                <br>
+                <strong>2. 移动距离计算：</strong><br>
+                30 + 10 + 10 + 10 + 10 + 100 + 10 + 20 + 10 + 10 = <strong>220</strong><br>
+                <br>
+                <strong>3. 平均寻道长度：</strong><br>
+                220 / 10 = <strong>22</strong>
+            </p>
+        </div>
+    </div>
+
+    <!-- Q9: PV Semaphores -->
+    <div class="mb-10 page-break-inside-avoid">
+        <h3 class="text-lg font-bold mb-3 border-l-4 border-gray-800 pl-3">九、PV原语 - 仓库搬运 (来源: 9.10.jpg)</h3>
+        <div class="p-4 bg-gray-50 rounded mb-4 text-sm">
+            <p>货架容量 3。A 放货 (1个), B 取货 (1个)。<br>
+               规则：(1) 未满A才放 (2) 未空B才取 (3) A/B 互斥进行。</p>
+        </div>
+
+        <div class="answer-block">
+            <p class="red-pen"><strong>解：经典的生产者-消费者问题变种。</strong></p>
+            
+            <p class="red-pen mt-2"><strong>1. 信号量定义及初值：</strong></p>
+            <div class="font-mono text-sm ml-4 text-black">
+                semaphore empty = 3;  <span class="red-pen text-sm">// 剩余空位，初值为容量</span><br>
+                semaphore full = 0;   <span class="red-pen text-sm">// 现有货物，初值为0</span><br>
+                semaphore mutex = 1;  <span class="red-pen text-sm">// 互斥信号量，保护货架操作</span>
+            </div>
+
+            <p class="red-pen mt-4"><strong>2. 进程逻辑描述：</strong></p>
+            <div class="grid grid-cols-2 gap-4 mt-2">
+                <div class="border border-red-300 p-2">
+                    <p class="font-bold text-center text-black mb-2">工人 A (放货)</p>
+                    <pre class="font-mono text-xs text-black leading-relaxed">
+while(true) {
+    准备货物;
+    <span class="text-blue-700 font-bold">P(empty);</span>  // 检查有无空位
+    <span class="text-blue-700 font-bold">P(mutex);</span>  // 申请互斥锁
+    
+    放入1个货物;
+
+    <span class="text-blue-700 font-bold">V(mutex);</span>  // 释放互斥锁
+    <span class="text-blue-700 font-bold">V(full);</span>   // 增加货物计数
+}
+                    </pre>
+                </div>
+                <div class="border border-red-300 p-2">
+                    <p class="font-bold text-center text-black mb-2">工人 B (取货)</p>
+                    <pre class="font-mono text-xs text-black leading-relaxed">
+while(true) {
+    <span class="text-blue-700 font-bold">P(full);</span>   // 检查有无货物
+    <span class="text-blue-700 font-bold">P(mutex);</span>  // 申请互斥锁
+    
+    取走1个货物;
+
+    <span class="text-blue-700 font-bold">V(mutex);</span>  // 释放互斥锁
+    <span class="text-blue-700 font-bold">V(empty);</span>  // 增加空位计数
+    使用货物;
+}
+                    </pre>
+                </div>
+            </div>
+            <p class="red-note text-xs mt-2">注：P(empty) 和 P(mutex) 的顺序不能颠倒，否则可能导致死锁。</p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function exportHTML() {
+        // Clone the document to clear the 'show-answer' class for the exported version if desired,
+        // or keep it based on user preference. Here we export exactly what is seen.
+        const htmlContent = document.documentElement.outerHTML;
+        const blob = new Blob([htmlContent], {type: 'text/html'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'OS_Exam_Training_Solved.html';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+</script>
+
 </body>
 </html>
