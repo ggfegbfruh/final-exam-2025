@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>离散数学期末复习全卷</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+    <!-- 引入字体：Noto Serif SC (正文), Ma Shan Zheng (红笔), Long Cang (蓝笔/手写) -->
+    <link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0" rel="stylesheet">
+    
+    <style>
+        body {
+            background-color: #f3f4f6;
+            font-family: 'Noto Serif SC', serif;
+            -webkit-print-color-adjust: exact;
+        }
+        .paper {
+            background-color: white;
+            width: 210mm;
+            min-height: 297mm;
+            margin: 20px auto;
+            padding: 20mm;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            position: relative;
+            background-image: radial-gradient(#f0f0f0 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        /* 红笔风格 */
+        .red-pen {
+            font-family: 'Ma Shan Zheng', cursive;
+            color: #dc2626; /* Red-600 */
+            transform: rotate(-1deg);
+            display: inline-block;
+        }
+        /* 蓝笔/答题风格 */
+        .blue-pen {
+            font-family: 'Long Cang', cursive;
+            color: #1e3a8a; /* Blue-900 */
+            font-weight: bold;
+        }
+        
+        .tick {
+            position: absolute;
+            left: -0.8em;
+            top: -0.4em;
+            font-size: 2em;
+            color: #dc2626;
+            font-family: 'Ma Shan Zheng', cursive;
+            pointer-events: none;
+            opacity: 0.9;
+            z-index: 10;
+        }
+        
+        /* 选项圈选效果 */
+        .circle-opt {
+            position: absolute;
+            left: -10px;
+            top: -2px;
+            width: calc(100% + 15px);
+            height: calc(100% + 4px);
+            border: 2px solid #dc2626;
+            border-radius: 50% 40% 70% 30% / 30% 50% 60% 40%;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .answer-block {
+            margin-top: 0.5rem;
+            padding: 0.8rem;
+            border: 2px dashed #fca5a5;
+            background-color: #fff1f2;
+            font-family: 'Ma Shan Zheng', cursive;
+            color: #b91c1c;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        /* 填空题下划线 */
+        .underline-blank {
+            display: inline-block;
+            min-width: 80px;
+            border-bottom: 1px solid #333;
+            text-align: center;
+            padding: 0 5px;
+            font-family: 'Ma Shan Zheng', cursive;
+            color: #dc2626;
+        }
+
+        /* 密封线 */
+        .sealing-line {
+            position: absolute;
+            left: 8mm;
+            top: 0;
+            bottom: 0;
+            border-right: 2px dashed #cbd5e1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #94a3b8;
+            font-size: 0.9rem;
+            padding-right: 5px;
+        }
+        .sealing-line span {
+            writing-mode: vertical-lr;
+            letter-spacing: 2em;
+        }
+
+        @media print {
+            body { background: none; }
+            .paper { margin: 0; box-shadow: none; width: 100%; }
+            .no-print { display: none !important; }
+            .page-break { page-break-before: always; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- 悬浮控制栏 (仅保留显示答案按钮) -->
+<div class="fixed top-4 left-4 flex flex-col gap-3 z-50 no-print">
+    <button class="flex items-center gap-2 bg-blue-700 text-white px-4 py-2 rounded shadow hover:bg-blue-600 transition font-sans" onclick="toggleAnswers()">
+        <span class="material-symbols-outlined">visibility</span>
+        显示/隐藏答案
+    </button>
+</div>
+
+<div class="paper">
+    <!-- 密封线 -->
+    <div class="sealing-line">
+        <span>装</span>
+        <span>订</span>
+        <span>线</span>
+    </div>
+
+    <!-- 试卷抬头 -->
+    <div class="text-center border-b-2 border-gray-800 pb-6 mb-8 relative">
+        <h1 class="text-4xl font-bold mb-4 tracking-widest">离散数学 复习题全卷</h1>
+        <div class="flex justify-center gap-12 text-sm text-gray-600 mt-4 font-sans">
+            <div class="relative">
+                班级：__________
+                <span class="blue-pen absolute left-12 -top-1 text-lg"></span>
+            </div>
+            <div class="relative">
+                姓名：__________
+                <span class="blue-pen absolute left-12 -top-1 text-lg"></span>
+            </div>
+            <div class="relative">
+                学号：__________
+                <span class="blue-pen absolute left-12 -top-1 text-lg"></span>
+            </div>
+        </div>
+        <!-- 分数印章 -->
+        <div class="absolute top-0 right-4 border-4 border-red-600 rounded-full w-24 h-24 flex items-center justify-center transform -rotate-12 opacity-80 red-answer-display">
+            <span class="red-pen text-5xl">100</span>
+        </div>
+    </div>
+
+    <!-- 一、选择题 -->
+    <div class="mb-8">
+        <h2 class="text-xl font-bold mb-4 border-l-4 border-gray-800 pl-3">一、选择题</h2>
+        
+        <!-- Q1 -->
+        <div class="mb-4">
+            <p class="mb-2">1. 设A是有限集，|A|=4，则A的所有子集的个数为 ( )</p>
+            <div class="grid grid-cols-4 gap-4 ml-4 text-sm">
+                <div class="relative">
+                    A. 16
+                    <div class="circle-opt red-answer-display"></div>
+                    <span class="tick red-answer-display">√</span>
+                </div>
+                <div class="relative">B. 8</div>
+                <div class="relative">C. 4</div>
+                <div class="relative">D. 12</div>
+            </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="mb-4">
+            <p class="mb-2">2. 若图G是一个包含n个顶点的连通图，则最少的边数为 ( )</p>
+            <div class="grid grid-cols-4 gap-4 ml-4 text-sm">
+                <div class="relative">A. n</div>
+                <div class="relative">
+                    B. n-1
+                    <div class="circle-opt red-answer-display"></div>
+                    <span class="tick red-answer-display">√</span>
+                </div>
+                <div class="relative">C. n+1</div>
+                <div class="relative">D. n(n-1)/2</div>
+            </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="mb-4">
+            <p class="mb-2">3. 在一个简单无向图中，度数为奇数的顶点个数 ( )</p>
+            <div class="grid grid-cols-2 gap-4 ml-4 text-sm">
+                <div class="relative">A. 可以是任意数</div>
+                <div class="relative">
+                    B. 必须是偶数
+                    <div class="circle-opt red-answer-display"></div>
+                    <span class="tick red-answer-display">√</span>
+                </div>
+                <div class="relative">C. 必须是奇数</div>
+                <div class="relative">D. 必须是0</div>
+            </div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="mb-4">
+            <p class="mb-2">4. 设集合 A ={1,2,3}, B ={ x , y }，从A到B的满射个数为 ( )</p>
+            <div class="grid grid-cols-4 gap-4 ml-4 text-sm">
+                <div class="relative">
+                    A. 6
+                    <div class="circle-opt red-answer-display"></div>
+                    <span class="tick red-answer-display">√</span>
+                </div>
+                <div class="relative">B. 8</div>
+                <div class="relative">C. 4</div>
+                <div class="relative">D. 3</div>
+            </div>
+        </div>
+
+        <!-- Q5 -->
+        <div class="mb-4">
+            <p class="mb-2">5. 若关系 R 在集合 A 上仅有自反性和对称性，则 R 的传递闭包 t(R) ( )</p>
+            <div class="grid grid-cols-2 gap-4 ml-4 text-sm">
+                <div class="relative">
+                    A. 一定是等价关系
+                    <div class="circle-opt red-answer-display"></div>
+                    <span class="tick red-answer-display">√</span>
+                </div>
+                <div class="relative">B. 一定不是等价关系</div>
+                <div class="relative">C. 可能是等价关系</div>
+                <div class="relative">D. 与R相等</div>
+            </div>
+        </div>
+
+        <!-- Q6 -->
+        <div class="mb-4">
+            <p class="mb-2">6. 若 P 和 Q 是两个命题，则 P↔Q 为真当且仅当 ( )</p>
+            <div class="grid grid-cols-2 gap-4 ml-4 text-sm">
+                <div class="relative">A. P 和 Q 均为真</div>
+                <div class="relative">B. P 和 Q 至少一个为真</div>
+                <div class="relative">
+                    C. P 和 Q 同真同假
+                    <div class="circle-opt red-answer-display"></div>
+                    <span class="tick red-answer-display">√</span>
+                </div>
+                <div class="relative">D. P 和 Q 至少一个为假</div>
+            </div>
+        </div>
+
+        <!-- Q7 -->
+        <div class="mb-4">
+            <p class="mb-2">7. 在谓词逻辑中， ∀ x ∃ yP ( x , y )与下列哪个等价 ( )</p>
+            <div class="grid grid-cols-2 gap-4 ml-4 text-sm">
+                <div class="relative">A. ∃ y ∀ xP ( x , y )</div>
+                <div class="relative">B. ∃ x ∀ yP ( x , y )</div>
+                <div class="relative">C. ∀ y ∃ xP ( x , y )</div>
+                <div class="relative">
+                    D. 以上都不对
+                    <div class="circle-opt red-answer-display"></div>
+                    <span class="tick red-answer-display">√</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Q8 -->
+        <div class="mb-4">
+            <p class="mb-2">8. G 是有 n 个节点的简单无向连通图，则 G 至少有多少条边 ( )</p>
+            <div class="grid grid-cols-4 gap-4 ml-4 text-sm">
+                <div class="relative">
+                    A. n – 1
+                    <div class="circle-opt red-answer-display"></div>
+                    <span class="tick red-answer-display">√</span>
+                </div>
+                <div class="relative">B. n + 1</div>
+                <div class="relative">C. n</div>
+                <div class="relative">D. 2n - 1</div>
+            </div>
+        </div>
+
+        <!-- Q9 -->
+        <div class="mb-4">
+            <p class="mb-2">9. 若关系 R⊆A×A 是自反的，则下列哪个命题一定成立 ( )</p>
+            <div class="grid grid-cols-2 gap-4 ml-4 text-sm">
+                <div class="relative">A. 若 (a,b)∈R ，则 b,a∈R</div>
+                <div class="relative">B. R 是传递的</div>
+                <div class="relative">
+                    C. (a,a)∈R 对任意 a∈A 均成立
+                    <div class="circle-opt red-answer-display"></div>
+                    <span class="tick red-answer-display">√</span>
+                </div>
+                <div class="relative">D. R 是对称的</div>
+            </div>
+        </div>
+
+        <!-- Q10 -->
+        <div class="mb-4">
+            <p class="mb-2">10. 若 P 和 Q 是两个命题，则 P→Q 等价于以下哪种表达？ ( )</p>
+            <div class="grid grid-cols-4 gap-4 ml-4 text-sm">
+                <div class="relative">
+                    A. ¬P∨Q
+                    <div class="circle-opt red-answer-display"></div>
+                    <span class="tick red-answer-display">√</span>
+                </div>
+                <div class="relative">B. ¬P∧Q</div>
+                <div class="relative">C. P∨¬Q</div>
+                <div class="relative">D. P∧¬Q</div>
+            </div>
+        </div>
+
+        <!-- Q11 -->
+        <div class="mb-4">
+            <p class="mb-2">11. 集合A = {1, 2, 3}, B = {a, b, c}，则从A到B的双射总数为 ( )</p>
+            <div class="grid grid-cols-4 gap-4 ml-4 text-sm">
+                <div class="relative">A. 3</div>
+                <div class="relative">
+                    B. 6
+                    <div class="circle-opt red-answer-display"></div>
+                    <span class="tick red-answer-display">√</span>
+                </div>
+                <div class="relative">C. 18</div>
+                <div class="relative">D. 27</div>
+            </div>
+        </div>
+
+        <!-- Q12 -->
+        <div class="mb-4">
+            <p class="mb-2">12. 设x为整数，集合A={x | x > 0, x < 6}，则A的幂集的元素个数是 ( )</p>
+            <div class="grid grid-cols-4 gap-4 ml-4 text-sm">
+                <div class="relative">A. 5</div>
+                <div class="relative">B. 10</div>
+                <div class="relative">
+                    C. 16 (注:若x&lt;5)
+                    <div class="circle-opt red-answer-display"></div>
+                    <span class="tick red-answer-display">√</span>
+                </div>
+                <div class="relative">D. 13</div>
+            </div>
+        </div>
+
+        <!-- Q13 -->
+        <div class="mb-4">
+            <p class="mb-2">13. 命题 (P∨Q)∧¬P 等价于 ( )</p>
+            <div class="grid grid-cols-4 gap-4 ml-4 text-sm">
+                <div class="relative">
+                    A. Q
+                    <div class="circle-opt red-answer-display"></div>
+                    <span class="tick red-answer-display">√</span>
+                </div>
+                <div class="relative">B. P</div>
+                <div class="relative">C. ¬P</div>
+                <div class="relative">D. P∧Q</div>
+            </div>
+        </div>
+
+        <!-- Q14 -->
+        <div class="mb-4">
+            <p class="mb-2">14. 在谓词逻辑中， ∀ x ∃ yP ( x , y )与下列哪个等价 ( )</p>
+            <div class="grid grid-cols-2 gap-4 ml-4 text-sm">
+                <div class="relative">A. ∃ y ∀ xP ( x , y )</div>
+                <div class="relative">B. ∃ x ∀ yP ( x , y )</div>
+                <div class="relative">C. ∀ y ∃ xP ( x , y )</div>
+                <div class="relative">
+                    D. 以上都不对
+                    <div class="circle-opt red-answer-display"></div>
+                    <span class="tick red-answer-display">√</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Q15 -->
+        <div class="mb-4">
+            <p class="mb-2">15. 命题“若今天是周二，则明天是周三”的逆命题是 ( )</p>
+            <div class="grid grid-cols-1 gap-2 ml-4 text-sm">
+                <div class="relative">
+                    A. 如果明天是周三，那么今天是周二
+                    <div class="circle-opt red-answer-display"></div>
+                    <span class="tick red-answer-display">√</span>
+                </div>
+                <div class="relative">B. 如果今天是周三，那么明天是周二</div>
+                <div class="relative">C. 如果今天不是周二，那么明天不是周三</div>
+                <div class="relative">D. 如果明天是周三，那么今天是周三</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- 二、填空题 -->
+    <div class="mb-8">
+        <h2 class="text-xl font-bold mb-4 border-l-4 border-gray-800 pl-3">二、填空题</h2>
+        <div class="space-y-4 text-sm ml-2 leading-loose">
+            <p>1. 若 f:A→B 是一个双射，则 f⁻¹:B→A 是 <span class="underline-blank red-answer-display">双射</span></p>
+            <p>2. 命题“所有人都会做数学题”的否定是 <span class="underline-blank red-answer-display">有些人不会做数学题</span></p>
+            <p>3. 5阶完全无向图边的数量为 <span class="underline-blank red-answer-display">10</span></p>
+            <p>4. 欧拉数值 φ16 = <span class="underline-blank red-answer-display">8</span></p>
+            <p>5. 设集合A={ a , b , c }，则A上自反关系的最少有序对个数为 <span class="underline-blank red-answer-display">3</span></p>
+            <p>6. 若集合 A 和 B 的笛卡尔积 A×B 有20个元素，且 |A| = 4 ，则 |B| = <span class="underline-blank red-answer-display">5</span></p>
+            <p>7. 若 a≡b(mod m) ，则 a 和 b 除以 m 的余数 <span class="underline-blank red-answer-display">相同</span></p>
+            <p>8. 在无向图中，所有节点度数之和等于图中边数的 <span class="underline-blank red-answer-display">2</span> 倍。</p>
+            <p>9. 如果集合A和B是两个互不相交的集合，则 |A∪B| = <span class="underline-blank red-answer-display">|A| + |B|</span></p>
+            <p>10. 在命题逻辑中，若 P→Q 为真且 Q 为假，则 P 的真值为 <span class="underline-blank red-answer-display">假 (False)</span></p>
+            <p>11. 设x为整数，集合A = {x | x > 0, x < 5} ，则其子集个数为 <span class="underline-blank red-answer-display">16</span></p>
+            <p>12. 若 a≡b(mod m) ，则 a 和 b 除以 m 的余数 <span class="underline-blank red-answer-display">相同</span></p>
+            <p>13. 一个n阶简单无向图的最大边数为 <span class="underline-blank red-answer-display">n(n-1)/2</span></p>
+            <p>14. 如果集合A和B是两个互不相交的集合，则 |A∩B| = <span class="underline-blank red-answer-display">0</span></p>
+            <p>15. 谓词逻辑公式“所有人都喜欢数学”用符号可表示为 <span class="underline-blank red-answer-display">∀x L(x)</span></p>
+        </div>
+    </div>
+
+    <!-- 三、判断题 -->
+    <div class="mb-8">
+        <h2 class="text-xl font-bold mb-4 border-l-4 border-gray-800 pl-3">三、判断题</h2>
+        <div class="space-y-3 text-sm">
+            <div class="flex items-baseline">
+                <span class="font-mono w-12 text-lg relative text-center">
+                    ( <span class="red-pen absolute top-0 left-0 w-full text-center red-answer-display">√</span> )
+                </span>
+                <p>1. 命题逻辑中，命题的否定总是和命题本身互为矛盾。</p>
+            </div>
+            <div class="flex items-baseline">
+                <span class="font-mono w-12 text-lg relative text-center">
+                    ( <span class="red-pen absolute top-0 left-0 w-full text-center red-answer-display">×</span> )
+                </span>
+                <p>2. 在图论中，孤立节点的度数为1。</p>
+            </div>
+            <div class="flex items-baseline">
+                <span class="font-mono w-12 text-lg relative text-center">
+                    ( <span class="red-pen absolute top-0 left-0 w-full text-center red-answer-display">√</span> )
+                </span>
+                <p>3. 集合的并运算满足分配律。</p>
+            </div>
+            <div class="flex items-baseline">
+                <span class="font-mono w-12 text-lg relative text-center">
+                    ( <span class="red-pen absolute top-0 left-0 w-full text-center red-answer-display">×</span> )
+                </span>
+                <p>4. 在任何关系中，如果( a , b ) ∈ R 且( b , c ) ∈ R ，则一定有( a , c ) ∈ R 。</p>
+            </div>
+            <div class="flex items-baseline">
+                <span class="font-mono w-12 text-lg relative text-center">
+                    ( <span class="red-pen absolute top-0 left-0 w-full text-center red-answer-display">√</span> )
+                </span>
+                <p>5. 在图论中，孤立节点的度数为0。</p>
+            </div>
+            <div class="flex items-baseline">
+                <span class="font-mono w-12 text-lg relative text-center">
+                    ( <span class="red-pen absolute top-0 left-0 w-full text-center red-answer-display">√</span> )
+                </span>
+                <p>6. “所有的鱼都会游泳”可以符号化为 ∀ x(P ( x )→ Q ( x ))。</p>
+            </div>
+            <div class="flex items-baseline">
+                <span class="font-mono w-12 text-lg relative text-center">
+                    ( <span class="red-pen absolute top-0 left-0 w-full text-center red-answer-display">√</span> )
+                </span>
+                <p>7. 若关系 R⊆A×A 是自反的，则 R 的对称闭包也是自反的 。</p>
+            </div>
+            <div class="flex items-baseline">
+                <span class="font-mono w-12 text-lg relative text-center">
+                    ( <span class="red-pen absolute top-0 left-0 w-full text-center red-answer-display">×</span> )
+                </span>
+                <p>8. 若集合 A 的子集个数为16，则 A 的元素个数为8。</p>
+            </div>
+            <div class="flex items-baseline">
+                <span class="font-mono w-12 text-lg relative text-center">
+                    ( <span class="red-pen absolute top-0 left-0 w-full text-center red-answer-display">×</span> )
+                </span>
+                <p>9. “我说的话都是假话。”是一个命题。</p>
+            </div>
+            <div class="flex items-baseline">
+                <span class="font-mono w-12 text-lg relative text-center">
+                    ( <span class="red-pen absolute top-0 left-0 w-full text-center red-answer-display">×</span> )
+                </span>
+                <p>10. 关系的传递闭包一定是对称的。</p>
+            </div>
+            <div class="flex items-baseline">
+                <span class="font-mono w-12 text-lg relative text-center">
+                    ( <span class="red-pen absolute top-0 left-0 w-full text-center red-answer-display">√</span> )
+                </span>
+                <p>11. 若关系 R 是集合上的自反关系，则必有 xRx</p>
+            </div>
+            <div class="flex items-baseline">
+                <span class="font-mono w-12 text-lg relative text-center">
+                    ( <span class="red-pen absolute top-0 left-0 w-full text-center red-answer-display">×</span> )
+                </span>
+                <p>12. 无向图中，若度数之和是奇数，则图中一定有孤立顶点。</p>
+            </div>
+            <div class="flex items-baseline">
+                <span class="font-mono w-12 text-lg relative text-center">
+                    ( <span class="red-pen absolute top-0 left-0 w-full text-center red-answer-display">×</span> )
+                </span>
+                <p>13. 果集合A和B没有公共元素，则 A∩B=A∪B</p>
+            </div>
+            <div class="flex items-baseline">
+                <span class="font-mono w-12 text-lg relative text-center">
+                    ( <span class="red-pen absolute top-0 left-0 w-full text-center red-answer-display">×</span> )
+                </span>
+                <p>14. 在任何关系中，如果( a , b ) ∈ R 且( b , c ) ∈ R ，则一定有( a , c ) ∈ R 。</p>
+            </div>
+            <div class="flex items-baseline">
+                <span class="font-mono w-12 text-lg relative text-center">
+                    ( <span class="red-pen absolute top-0 left-0 w-full text-center red-answer-display">×</span> )
+                </span>
+                <p>15. 关系的传递闭包一定是对称的。</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 四、计算题 -->
+    <div class="mb-8">
+        <h2 class="text-xl font-bold mb-4 border-l-4 border-gray-800 pl-3">四、计算题</h2>
+        
+        <div class="mb-6">
+            <p class="font-bold mb-2">1. 求 3<sup>2025</sup> 的个位数。</p>
+            <div class="answer-block red-answer-display">
+                <p>解: 3的幂次个位数周期为4 (3, 9, 7, 1)。<br>
+                2025 ÷ 4 = 506 ... 1。<br>
+                所以同 3<sup>1</sup>，个位数为 <span class="text-2xl">3</span>。</p>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <p class="font-bold mb-2">2. 求 3<sup>2026</sup> 的个位数。</p>
+            <div class="answer-block red-answer-display">
+                <p>解: 2026 ÷ 4 = 506 ... 2。<br>
+                所以同 3<sup>2</sup>，个位数为 <span class="text-2xl">9</span>。</p>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <p class="font-bold mb-2">3. 设 A={0,1,2,3} , A 上的关系 R={(x,y)|x+y=3}, S={(x,y)|y-x=1}。计算 R∪S, R, S-R。</p>
+            <div class="answer-block red-answer-display">
+                <p>R = {(0,3), (1,2), (2,1), (3,0)}</p>
+                <p>S = {(0,1), (1,2), (2,3)}</p>
+                <p>R∪S = {(0,3), (1,2), (2,1), (3,0), (0,1), (2,3)}</p>
+                <p>S-R = {(0,1), (2,3)}</p>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <p class="font-bold mb-2">4. 接上题，计算 R∩S, R-S, R⊕S。</p>
+            <div class="answer-block red-answer-display">
+                <p>R∩S = {(1,2)}</p>
+                <p>R-S = {(0,3), (2,1), (3,0)}</p>
+                <p>R⊕S = (R∪S)-(R∩S) = {(0,3), (2,1), (3,0), (0,1), (2,3)}</p>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <p class="font-bold mb-2">5. 命题公式 (¬p∨¬q)→(p↔¬q) 的真值表、范式及类型。</p>
+            <div class="answer-block red-answer-display">
+                <p>真值表结果: F, T, T, T (对应 00, 01, 10, 11)</p>
+                <p>类型: 可满足式</p>
+                <p>主析取范式: ∑m(1, 2, 3)</p>
+                <p>主合取范式: ∏M(0)</p>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <p class="font-bold mb-2">6. 命题公式 (q→p)∧(¬p∧q) 的真值表、范式及类型。</p>
+            <div class="answer-block red-answer-display">
+                <p>逻辑化简: (¬q∨p)∧¬p∧q = ¬q∧¬p∧q ∨ p∧¬p∧q = F ∨ F = F</p>
+                <p>类型: 矛盾式 (永假)</p>
+                <p>主合取范式: ∏M(0,1,2,3)</p>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <p class="font-bold mb-2">7. 设无向图 G 是一个3-正则 (n, m) 图，且 2n-3 = m，求 n 和 m。</p>
+            <div class="answer-block red-answer-display">
+                <p>由握手定理: 3n = 2m => m = 1.5n</p>
+                <p>代入: 2n - 3 = 1.5n => 0.5n = 3 => n=6</p>
+                <p>m = 1.5 * 6 = 9</p>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <p class="font-bold mb-2">8. 设无向图 G 是一个4-正则 (n, m) 图，且满足 n+2 = m，求 n 和 m。</p>
+            <div class="answer-block red-answer-display">
+                <p>由握手定理: 4n = 2m => m = 2n</p>
+                <p>代入: n + 2 = 2n => n = 2</p>
+                <p>m = 4</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- 五、简答与应用 -->
+    <div class="mb-8">
+        <h2 class="text-xl font-bold mb-4 border-l-4 border-gray-800 pl-3">五、关系与谓词</h2>
+        
+        <div class="mb-6">
+            <p class="font-bold mb-2">1. 设 A={a,b,c,d}, R={(a,a),(a,b),(b,a),(b,c),(c,d)}。求对称闭包 s(R) 和传递闭包 t(R)。</p>
+            <div class="answer-block red-answer-display">
+                <p>s(R) = R ∪ {(c,b), (d,c)}</p>
+                <p>t(R) = {(a,a),(a,b),(b,a),(b,b),(b,c),(a,c),(c,d),(b,d),(a,d)}</p>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <p class="font-bold mb-2">2. 同上 R，求自反闭包 r(R)。</p>
+            <div class="answer-block red-answer-display">
+                <p>r(R) = R ∪ {(c,c), (d,d), (b,b)}</p>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <p class="font-bold mb-2">3. 谓词符号化：(1) 并非每个学生都有所作为; (2) 有些学生是聪明和勤奋的。</p>
+            <div class="answer-block red-answer-display">
+                <p>(1) ¬∀x (S(x) → A(x))</p>
+                <p>(2) ∃x (S(x) ∧ C(x) ∧ D(x))</p>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <p class="font-bold mb-2">4. 谓词符号化：(1) 每个学生或是勤奋的或是聪明的; (2) 所有勤奋的人都有所作为。</p>
+            <div class="answer-block red-answer-display">
+                <p>(1) ∀x (S(x) → (D(x) ∨ C(x)))</p>
+                <p>(2) ∀x (D(x) → A(x))</p>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <p class="font-bold mb-2">5 & 6. 写出 G 的邻接矩阵和可达矩阵。</p>
+            <div class="answer-block red-answer-display">
+                <p>注：原题未提供图 G 的图像。</p>
+                <p>标准解法提示：邻接矩阵 A[i][j]=1 若有边；可达矩阵 P 可通过 (A+I)^n 计算或 Warshall 算法求得。</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 六、证明题 -->
+    <div class="mb-8">
+        <h2 class="text-xl font-bold mb-4 border-l-4 border-gray-800 pl-3">六、证明题</h2>
+        
+        <div class="mb-6">
+            <p class="font-bold mb-2">1. 设 A={a,b,c,d}, R={(a,c),(c,a),(b,d),(d,b)}∪IA。证明 R 是等价关系。</p>
+            <div class="answer-block red-answer-display">
+                <p>证明：</p>
+                <p>1. 自反性：包含 IA，成立。</p>
+                <p>2. 对称性：(a,c)与(c,a)成对，(b,d)与(d,b)成对，成立。</p>
+                <p>3. 传递性：路径封闭，无断裂，成立。</p>
+                <p>故 R 是等价关系。</p>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <p class="font-bold mb-2">2. 证明 ∃x(A(x)→B(x)) ⇔ ∀x A(x) → ∃x B(x)</p>
+            <div class="answer-block red-answer-display">
+                <p>左边 ⇔ ∃x(¬A(x) ∨ B(x)) ⇔ ∃x¬A(x) ∨ ∃x B(x)</p>
+                <p>右边 ⇔ ¬(∀x A(x)) ∨ ∃x B(x) ⇔ ∃x¬A(x) ∨ ∃x B(x)</p>
+                <p>两边相等，得证。</p>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <p class="font-bold mb-2">3. 证明 ∃x∃y(A(x)→B(y)) ⇔ ∀x A(x) → ∃y B(y)</p>
+            <div class="answer-block red-answer-display">
+                <p>左边 ⇔ ∃x∃y(¬A(x) ∨ B(y)) ⇔ ∃x(¬A(x) ∨ ∃y B(y))</p>
+                <p>⇔ (∃x¬A(x)) ∨ (∃y B(y))</p>
+                <p>右边 ⇔ ¬(∀x A(x)) ∨ ∃y B(y) ⇔ ∃x¬A(x) ∨ ∃y B(y)</p>
+                <p>两边相等，得证。</p>
+            </div>
+        </div>
+        
+        <div class="mb-6">
+            <p class="font-bold mb-2">4. 证明 ((p∨q)∧¬(p∧q)) ⇔ ¬(p↔q)</p>
+            <div class="answer-block red-answer-display">
+                <p>左边是异或 (XOR)：p,q 真值不同时为真。</p>
+                <p>右边是同或的否定：即 p,q 真值不相同时为真。</p>
+                <p>两者逻辑含义一致。</p>
+                <p>Q.E.D</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleAnswers() {
+        const answers = document.querySelectorAll('.red-answer-display');
+        answers.forEach(el => {
+            if (el.style.visibility === 'hidden') {
+                el.style.visibility = 'visible';
+                el.style.opacity = '1'; // For opacity transition elements
+            } else {
+                el.style.visibility = 'hidden';
+                el.style.opacity = '0';
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
