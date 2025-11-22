@@ -3,177 +3,169 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>操作系统：计算题专项训练</title>
+    <title>操作系统计算题专项训练（纯净版）</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com" rel="preconnect">
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
-    <!-- Using Noto Serif SC for body text and Ma Shan Zheng for the "Red Pen" handwritten effect -->
-    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Ma+Shan+Zheng&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0" rel="stylesheet">
     <style>
         body {
-            background-color: #f3f4f6;
-            font-family: 'Noto Serif SC', serif;
+            background-color: #e5e7eb;
+            font-family: 'Noto Serif SC', 'SimSun', serif;
+            color: #1f2937;
+            line-height: 1.6;
         }
         .paper {
             background-color: white;
-            width: 210mm;
+            width: 100%;
+            max-width: 210mm;
             min-height: 297mm;
             margin: 20px auto;
             padding: 20mm;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            padding-left: 30mm; /* 为密封线留出空间 */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             position: relative;
+            box-sizing: border-box;
         }
-        /* Handwritten Style */
+        
+        /* 密封线 */
+        .sealing-line {
+            position: absolute;
+            left: 12mm;
+            top: 0;
+            bottom: 0;
+            border-right: 1px dashed #9ca3af;
+            padding-right: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #6b7280;
+            font-size: 0.9rem;
+            user-select: none;
+        }
+        .sealing-line span {
+            writing-mode: vertical-lr;
+            letter-spacing: 2em;
+            margin: 20px 0;
+        }
+
+        /* 红色楷体手写效果 */
         .red-pen {
-            font-family: 'Ma Shan Zheng', cursive;
-            color: #dc2626; /* Red-600 */
+            font-family: "KaiTi", "STKaiti", "楷体", serif;
+            color: #c92a2a; 
             font-size: 1.15em;
-            transform: rotate(-0.5deg);
-            display: block;
+            display: inline-block;
+            margin-left: 0.1rem;
+            font-weight: 500;
+        }
+        .red-pen-block {
+            font-family: "KaiTi", "STKaiti", "楷体", serif;
+            color: #c92a2a;
+            font-size: 1.05em;
+            margin-top: 0.5rem;
+            padding: 1rem;
+            border-left: 4px solid #fecaca;
+            background-color: #fff5f5;
+            border-radius: 4px;
+            line-height: 1.8;
         }
         .red-note {
-            font-family: 'Ma Shan Zheng', cursive;
-            color: #ef4444; /* Red-500 */
             font-size: 0.9em;
-            margin-top: 4px;
-        }
-        .answer-block {
-            margin-top: 1rem;
-            padding: 1rem;
-            border-left: 3px solid #fecaca; /* Red-200 */
-            background-color: #fef2f2; /* Red-50 */
             color: #b91c1c;
-            font-family: 'Ma Shan Zheng', cursive;
-            display: none; /* Hidden by default */
+            margin-top: 0.5rem;
         }
-        .show-answer .answer-block {
-            display: block;
-        }
-        /* Tables in Answers */
-        .ans-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 10px 0;
-            font-size: 0.95em;
-        }
-        .ans-table th, .ans-table td {
-            border: 1px solid #b91c1c;
-            padding: 4px 8px;
-            text-align: center;
-        }
-        .ans-table th {
-            background-color: #fee2e2;
-        }
-        /* Gantt Chart Styles */
+
+        /* 甘特图样式 */
         .gantt-box {
             display: flex;
-            border: 2px solid #b91c1c;
-            margin: 10px 0;
-            height: 40px;
+            border: 2px solid #c92a2a;
+            margin: 15px 0;
+            height: 45px;
             width: 100%;
-            max-width: 600px;
             font-family: sans-serif;
-            font-size: 0.8em;
+            font-size: 0.85em;
+            border-radius: 4px;
+            overflow: hidden;
         }
         .g-seg {
             display: flex;
             align-items: center;
             justify-content: center;
-            border-right: 1px solid #b91c1c;
+            border-right: 1px solid #c92a2a;
             position: relative;
-            color: black;
+            color: #000;
             font-weight: bold;
         }
         .g-seg:last-child { border-right: none; }
         .g-p1 { background-color: #bfdbfe; } /* Blue-200 */
         .g-p2 { background-color: #bbf7d0; } /* Green-200 */
-        .g-idle { background-color: #e5e7eb; color: #6b7280; } /* Gray-200 */
+        .g-idle { background-color: #f3f4f6; color: #6b7280; } 
         .g-time {
             position: absolute;
-            bottom: -20px;
-            right: -10px;
-            font-size: 0.8em;
-            color: #b91c1c;
-            font-family: 'Ma Shan Zheng', cursive;
+            bottom: -22px;
+            right: -8px;
+            font-size: 0.9em;
+            color: #c92a2a;
+            font-family: "KaiTi", serif;
         }
         .g-start {
             position: absolute;
-            bottom: -20px;
+            bottom: -22px;
             left: -5px;
-            font-size: 0.8em;
-            color: #b91c1c;
-            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 0.9em;
+            color: #c92a2a;
+            font-family: "KaiTi", serif;
         }
 
-        /* Floating Controls */
-        .controls {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            z-index: 100;
+        /* 表格样式 */
+        .ans-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            font-size: 0.95em;
+            font-family: "KaiTi", serif;
+            color: #c92a2a;
         }
-        .btn {
-            background-color: #2563eb;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 6px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            font-family: sans-serif;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: background 0.2s;
+        .ans-table th, .ans-table td {
+            border: 1px solid #c92a2a;
+            padding: 6px 12px;
+            text-align: center;
         }
-        .btn:hover { background-color: #1d4ed8; }
-        .btn-toggle { background-color: #4b5563; }
-        .btn-toggle:hover { background-color: #374151; }
+        .ans-table th {
+            background-color: #fee2e2;
+            font-weight: bold;
+        }
 
         @media print {
             body { background: none; }
-            .paper { margin: 0; box-shadow: none; width: 100%; padding: 0; }
-            .controls { display: none; }
-            .page-break { page-break-before: always; }
-            .answer-block { display: block !important; border-left: 1px solid #ccc; background: none; color: black; font-family: 'Noto Serif SC', serif; }
-            .red-pen, .red-note, .tick, .g-time { color: black !important; font-family: 'Noto Serif SC', serif !important; transform: none; }
+            .paper { margin: 0; box-shadow: none; width: 100%; padding: 20mm; }
         }
     </style>
 </head>
-<body class="show-answer"> <!-- Default showing answers for preview -->
-
-<!-- Floating Controls -->
-<div class="controls">
-    <button class="btn" onclick="exportHTML()">
-        <span class="material-symbols-outlined">save</span>
-        保存为HTML
-    </button>
-    <button class="btn btn-toggle" onclick="document.body.classList.toggle('show-answer')">
-        <span class="material-symbols-outlined">visibility</span>
-        显示/隐藏 答案解析
-    </button>
-</div>
+<body>
 
 <div class="paper">
-    <!-- Header -->
-    <div class="text-center border-b-2 border-gray-800 pb-6 mb-8 relative">
-        <h1 class="text-3xl font-bold mb-2">操作系统 (OS) 计算题专项训练</h1>
-        <div class="flex justify-center gap-8 text-sm text-gray-600 mt-4 font-sans">
-            <span>试卷来源：上传图片整理</span>
-            <span>重点：调度、死锁、存储、PV</span>
-        </div>
-        <!-- Score Stamp -->
-        <div class="absolute top-0 right-0 border-4 border-red-600 rounded-full w-24 h-24 flex items-center justify-center transform rotate-12 opacity-80 answer-block" style="display: flex; background: transparent; border-color: #dc2626; color: #dc2626;">
-            <span class="red-pen text-5xl" style="transform: none;">优</span>
+    <!-- 密封线 -->
+    <div class="sealing-line">
+        <span>装</span>
+        <span>订</span>
+        <span>线</span>
+    </div>
+
+    <!-- 试卷抬头 -->
+    <div class="text-center border-b-2 border-gray-800 pb-6 mb-8">
+        <h1 class="text-3xl font-bold mb-6 tracking-widest">操作系统 计算题专项训练</h1>
+        <div class="flex justify-center gap-12 text-sm font-serif text-gray-700">
+            
         </div>
     </div>
 
     <!-- Q1: Process Scheduling -->
     <div class="mb-10">
-        <h3 class="text-lg font-bold mb-3 border-l-4 border-gray-800 pl-3">一、多道批处理调度 (来源: 12.jpg)</h3>
-        <div class="p-4 bg-gray-50 rounded mb-4 text-sm">
+        <h3 class="text-lg font-bold mb-3 border-l-4 border-gray-800 pl-3">一、多道批处理调度</h3>
+        <div class="p-4 bg-gray-50 rounded mb-4 text-sm border border-gray-200">
             <p class="mb-2"><strong>题目：</strong> 系统仅有 P1, P2 两个作业，非抢占式。P2 比 P1 晚 10ms 到达。</p>
             <ul class="list-disc pl-5 mb-2">
                 <li>P1: 计算 50ms, I/O 70ms, 计算 30ms</li>
@@ -183,12 +175,12 @@
                (2) CPU 有无空闲？若有，在哪段时间？CPU 利用率是多少？</p>
         </div>
 
-        <div class="answer-block">
-            <p class="red-pen mb-2"><strong>解：(1) 运行时间关系图 (Gantt Chart)</strong></p>
-            <p class="red-note text-xs">注：非抢占式多道批处理，P1 先到先服务。当 P1 进行 I/O 时，CPU 空闲，P2 立即接管 CPU。</p>
+        <div class="red-pen-block">
+            <p><strong>解：(1) 运行时间关系图 (Gantt Chart)</strong></p>
+            <p class="red-note">注：非抢占式多道批处理，P1 先到先服务。当 P1 进行 I/O 时，CPU 空闲，P2 立即接管 CPU。</p>
             
-            <div class="relative pt-6 pb-2">
-                <div class="font-bold text-xs mb-1 text-gray-600">CPU 占用情况:</div>
+            <div class="relative pt-6 pb-8">
+                <div class="font-bold text-xs mb-1 text-gray-600 font-sans">CPU 占用情况:</div>
                 <div class="gantt-box">
                     <div class="g-seg g-p1" style="flex: 50;">P1<span class="g-start">0</span><span class="g-time">50</span></div>
                     <div class="g-seg g-p2" style="flex: 100;">P2<span class="g-time">150</span></div>
@@ -197,17 +189,17 @@
                     <div class="g-seg g-p2" style="flex: 30;">P2<span class="g-time">220</span></div>
                 </div>
                 
-                <div class="font-bold text-xs mb-1 mt-4 text-gray-600">I/O 并行情况 (辅助分析):</div>
-                <div class="gantt-box" style="border-style: dashed; opacity: 0.7;">
+                <div class="font-bold text-xs mb-1 mt-6 text-gray-600 font-sans">I/O 并行情况 (辅助分析):</div>
+                <div class="gantt-box" style="border-style: dashed; opacity: 0.8; border-color: #9ca3af;">
                     <div class="g-seg g-idle" style="flex: 50;">Wait</div>
-                    <div class="g-seg g-p1" style="flex: 70; background-color: #93c5fd;">P1 I/O<span class="g-start">50</span><span class="g-time">120</span></div>
+                    <div class="g-seg g-p1" style="flex: 70; background-color: #e0f2fe; color: #000;">P1 I/O<span class="g-start">50</span><span class="g-time">120</span></div>
                     <div class="g-seg g-idle" style="flex: 30;">Wait</div>
-                    <div class="g-seg g-p2" style="flex: 40; background-color: #86efac;">P2 I/O<span class="g-start">150</span><span class="g-time">190</span></div>
+                    <div class="g-seg g-p2" style="flex: 40; background-color: #dcfce7; color: #000;">P2 I/O<span class="g-start">150</span><span class="g-time">190</span></div>
                     <div class="g-seg g-idle" style="flex: 30;">Done</div>
                 </div>
             </div>
 
-            <p class="red-pen mt-2">
+            <p class="mt-2">
                 <strong>分析步骤：</strong><br>
                 1. 0ms: P1 到达并运行。<br>
                 2. 50ms: P1 转入 I/O。CPU 空闲，P2 (10ms已到) 立即上 CPU 运行。<br>
@@ -221,8 +213,8 @@
                 完成所需最少时间 = <strong>220ms</strong>
             </p>
 
-            <p class="red-pen mt-4"><strong>(2) CPU 空闲与利用率</strong></p>
-            <p class="red-pen">
+            <p class="mt-4"><strong>(2) CPU 空闲与利用率</strong></p>
+            <p>
                 CPU 空闲时间段：<strong>180ms ~ 190ms</strong> (共 10ms)。<br>
                 <span class="red-note">注：此时 P1 已结束，P2 正在做 I/O，无进程需 CPU。</span><br>
                 CPU 利用率 = (总时间 - 空闲时间) / 总时间<br>
@@ -231,20 +223,18 @@
         </div>
     </div>
 
-    <hr class="border-gray-300 my-6">
-
     <!-- Q3: Banker's Algorithm -->
     <div class="mb-10 page-break-inside-avoid">
-        <h3 class="text-lg font-bold mb-3 border-l-4 border-gray-800 pl-3">三、银行家算法 (来源: 3.jpg)</h3>
-        <div class="p-4 bg-gray-50 rounded mb-4 text-sm">
+        <h3 class="text-lg font-bold mb-3 border-l-4 border-gray-800 pl-3">二、银行家算法</h3>
+        <div class="p-4 bg-gray-50 rounded mb-4 text-sm border border-gray-200">
             <p>5个进程 P0-P4，资源 A, B, C。Alloc 和 Max 已知。</p>
             <p>(1) 当 Avaiable (x,y,z) = (2,2,3) 时，系统是否安全？<br>
                (2) 当 Avaiable (x,y,z) = (1,1,2) 时，系统是否安全？</p>
         </div>
 
-        <div class="answer-block">
-            <p class="red-pen"><strong>解：首先计算需求矩阵 Need = Max - Allocation</strong></p>
-            <table class="ans-table" style="width: 60%; margin: 0 auto;">
+        <div class="red-pen-block">
+            <p><strong>解：首先计算需求矩阵 Need = Max - Allocation</strong></p>
+            <table class="ans-table" style="width: 80%; margin: 10px auto;">
                 <tr><th>进程</th><th>Alloc</th><th>Max</th><th>Need (M-A)</th></tr>
                 <tr><td>P0</td><td>1 1 2</td><td>3 4 7</td><td><strong>2 3 5</strong></td></tr>
                 <tr><td>P1</td><td>2 0 3</td><td>4 2 5</td><td><strong>2 2 2</strong></td></tr>
@@ -253,26 +243,26 @@
                 <tr><td>P4</td><td>0 0 4</td><td>2 3 5</td><td><strong>2 3 1</strong></td></tr>
             </table>
 
-            <p class="red-pen mt-4"><strong>(1) 当 Available = (2, 2, 3)</strong></p>
-            <p class="red-pen">尝试寻找安全序列：</p>
-            <ul class="red-pen list-decimal pl-6 text-sm">
-                <li>检查 <strong>P2</strong>: Need(1,0,2) ≤ Avail(2,2,3) <span class="tick">√</span>。<br>
+            <p class="mt-4"><strong>(1) 当 Available = (2, 2, 3)</strong></p>
+            <p>尝试寻找安全序列：</p>
+            <ul class="list-decimal pl-6 text-sm leading-relaxed">
+                <li>检查 <strong>P2</strong>: Need(1,0,2) ≤ Avail(2,2,3) <span class="font-bold">√</span>。<br>
                     执行 P2，回收 Alloc(0,3,1)。<br>
                     New Avail = (2,2,3) + (0,3,1) = <strong>(2, 5, 4)</strong></li>
-                <li>检查 <strong>P1</strong>: Need(2,2,2) ≤ Avail(2,5,4) <span class="tick">√</span>。<br>
+                <li>检查 <strong>P1</strong>: Need(2,2,2) ≤ Avail(2,5,4) <span class="font-bold">√</span>。<br>
                     回收 Alloc(2,0,3)。New Avail = <strong>(4, 5, 7)</strong></li>
-                <li>检查 <strong>P3</strong>: Need(2,1,2) ≤ Avail(4,5,7) <span class="tick">√</span>。<br>
+                <li>检查 <strong>P3</strong>: Need(2,1,2) ≤ Avail(4,5,7) <span class="font-bold">√</span>。<br>
                     回收 Alloc(3,0,2)。New Avail = <strong>(7, 5, 9)</strong></li>
-                <li>检查 <strong>P4</strong>: Need(2,3,1) ≤ Avail(7,5,9) <span class="tick">√</span>。<br>
+                <li>检查 <strong>P4</strong>: Need(2,3,1) ≤ Avail(7,5,9) <span class="font-bold">√</span>。<br>
                     回收 ... OK</li>
                 <li>检查 <strong>P0</strong> ... OK</li>
             </ul>
-            <p class="red-pen mt-2"><strong>结论：系统处于安全状态。</strong><br>
+            <p class="mt-2"><strong>结论：系统处于安全状态。</strong><br>
             存在安全序列：P2 → P1 → P3 → P4 → P0 (答案不唯一)。</p>
 
-            <p class="red-pen mt-4"><strong>(2) 当 Available = (1, 1, 2)</strong></p>
-            <ul class="red-pen list-decimal pl-6 text-sm">
-                <li>检查 <strong>P2</strong>: Need(1,0,2) ≤ (1,1,2) <span class="tick">√</span>。<br>
+            <p class="mt-4"><strong>(2) 当 Available = (1, 1, 2)</strong></p>
+            <ul class="list-decimal pl-6 text-sm leading-relaxed">
+                <li>检查 <strong>P2</strong>: Need(1,0,2) ≤ (1,1,2) <span class="font-bold">√</span>。<br>
                     回收 P2。New Avail = (1,1,2) + (0,3,1) = <strong>(1, 4, 3)</strong></li>
                 <li>此时剩余进程 Need:
                     <br>P0(2,3,5) - A资源不足(2>1)
@@ -282,27 +272,27 @@
                 </li>
                 <li>无法找到下一个可执行进程。</li>
             </ul>
-            <p class="red-pen mt-2"><strong>结论：系统处于不安全状态，可能发生死锁。</strong></p>
+            <p class="mt-2"><strong>结论：系统处于不安全状态，可能发生死锁。</strong></p>
         </div>
     </div>
 
     <!-- Q4: Paging Address Translation -->
     <div class="mb-10 page-break-inside-avoid">
-        <h3 class="text-lg font-bold mb-3 border-l-4 border-gray-800 pl-3">四、分页地址转换 (来源: 4.jpg)</h3>
-        <div class="p-4 bg-gray-50 rounded mb-4 text-sm">
+        <h3 class="text-lg font-bold mb-3 border-l-4 border-gray-800 pl-3">三、分页地址转换</h3>
+        <div class="p-4 bg-gray-50 rounded mb-4 text-sm border border-gray-200">
             <p>内存 128KB, 页面大小 2KB。页表：0→3, 1→5, 2→8, 3→10, 4→12。</p>
             <p>将逻辑地址 3500B、11000B 转换为物理地址。</p>
         </div>
 
-        <div class="answer-block">
-            <p class="red-pen"><strong>基础参数：</strong><br>
+        <div class="red-pen-block">
+            <p><strong>基础参数：</strong><br>
                页面大小 L = 2KB = 2048 B。<br>
                页号 P = INT(逻辑地址 / L)<br>
                页内偏移 W = 逻辑地址 % L</p>
 
             <div class="mt-4">
-                <p class="red-pen"><strong>1. 逻辑地址 3500B</strong></p>
-                <div class="ml-4 red-pen text-sm">
+                <p><strong>1. 逻辑地址 3500B</strong></p>
+                <div class="ml-4 text-sm">
                     P = 3500 / 2048 = 1<br>
                     W = 3500 % 2048 = 1452<br>
                     查表：页号 1 对应的块号(物理页框)为 <strong>5</strong>。<br>
@@ -312,31 +302,29 @@
             </div>
 
             <div class="mt-4">
-                <p class="red-pen"><strong>2. 逻辑地址 11000B</strong></p>
-                <div class="ml-4 red-pen text-sm">
+                <p><strong>2. 逻辑地址 11000B</strong></p>
+                <div class="ml-4 text-sm">
                     P = 11000 / 2048 = 5 (取整)<br>
                     W = 11000 % 2048 = 760<br>
                     查表：页表仅给出了 0, 1, 2, 3, 4 页的映射。<br>
                     <strong>页号 5 超出页表长度(或未在内存中)。</strong><br>
-                    <span class="red-note">注：考试中若未给出页表长度寄存器(PTR)，通常视为越界中断或缺页中断。若仅考察计算，需注明“该页不在页表中，发生缺页/越界”。</span>
+                    <span class="red-note">注：发生缺页中断或越界错误。</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <hr class="border-gray-300 my-6">
-
     <!-- Q5: LRU Page Replacement -->
     <div class="mb-10 page-break-inside-avoid">
-        <h3 class="text-lg font-bold mb-3 border-l-4 border-gray-800 pl-3">五、页面置换算法 LRU (来源: 56.jpg)</h3>
-        <div class="p-4 bg-gray-50 rounded mb-4 text-sm">
+        <h3 class="text-lg font-bold mb-3 border-l-4 border-gray-800 pl-3">四、页面置换算法 LRU</h3>
+        <div class="p-4 bg-gray-50 rounded mb-4 text-sm border border-gray-200">
             <p>访问序列：1, 3, 2, 1, 0, 3, 4, 3, 0, 2<br>
                物理块数：3。<strong>条件：第1页已被装入。</strong><br>
                求：依次淘汰的页号？缺页中断率？</p>
         </div>
 
-        <div class="answer-block">
-            <p class="red-pen"><strong>解：使用 LRU (最近最久未使用) 算法</strong></p>
+        <div class="red-pen-block">
+            <p><strong>解：使用 LRU (最近最久未使用) 算法</strong></p>
             <p class="red-note text-sm">规则：当内存满时，淘汰那个“最后一次访问时间距离现在最远”的页面。</p>
             
             <table class="ans-table text-sm">
@@ -359,44 +347,42 @@
                 <tr><td>2</td><td>[2, 0, 3]</td><td>√</td><td><strong>4</strong></td></tr>
             </table>
 
-            <p class="red-pen mt-4">
+            <p class="mt-4">
                 <strong>1. 依次淘汰的页号：</strong> 3, 2, 1, 4<br>
                 <strong>2. 缺页次数：</strong> 6次 (初始1页已在，后续3,2,0,3,4,2触发缺页)<br>
                 <strong>3. 缺页中断率：</strong> 6 / 10 = <strong>60%</strong>
             </p>
-            <p class="red-note text-xs">注意：题目说“第1页已装入”，所以序列第一个“1”算命中，不产生缺页。</p>
         </div>
     </div>
 
     <!-- Q8: Disk Scheduling -->
     <div class="mb-10 page-break-inside-avoid">
-        <h3 class="text-lg font-bold mb-3 border-l-4 border-gray-800 pl-3">八、磁盘调度 SSTF (来源: 678.jpg)</h3>
-        <div class="p-4 bg-gray-50 rounded mb-4 text-sm">
+        <h3 class="text-lg font-bold mb-3 border-l-4 border-gray-800 pl-3">五、磁盘调度 SSTF</h3>
+        <div class="p-4 bg-gray-50 rounded mb-4 text-sm border border-gray-200">
             <p>序列：90, 150, 80, 160, 70, 180, 60, 200, 50, 190<br>
                当前磁头：120。算法：SSTF (最短寻道时间优先)。</p>
         </div>
 
-        <div class="answer-block">
-            <p class="red-pen"><strong>解：SSTF 策略是每次找离当前磁头最近的磁道。</strong></p>
+        <div class="red-pen-block">
+            <p><strong>解：SSTF 策略是每次找离当前磁头最近的磁道。</strong></p>
             
-            <div class="font-mono text-sm bg-white p-2 border border-red-200 rounded">
+            <div class="font-mono text-sm bg-white p-3 border border-red-200 rounded mb-3 text-black" style="font-family: 'JetBrains Mono', monospace;">
                 Start: 120<br>
                 待访问: {50,60,70,80,90, 150,160,180,190,200}<br>
                 <br>
-                1. 当前120 -> 找最近 -> 90 (距30) 或 150 (距30)。<br>
-                <span class="red-note text-xs">注：通常双向距离相等时，可任选。此处依据贪心趋势，若选90则后续密集，通常更优。设选 90。</span><br>
-                2. 90 -> 80 (距10)<br>
-                3. 80 -> 70 (距10)<br>
-                4. 70 -> 60 (距10)<br>
-                5. 60 -> 50 (距10) [小端处理完，当前在50]<br>
-                6. 50 -> 150 (距100)<br>
+                1. 120 -> 90  (距30) <span class="red-note font-sans text-xs">(注: 150也距30，选90使后续更密集)</span><br>
+                2. 90  -> 80  (距10)<br>
+                3. 80  -> 70  (距10)<br>
+                4. 70  -> 60  (距10)<br>
+                5. 60  -> 50  (距10) [转折点]<br>
+                6. 50  -> 150 (距100)<br>
                 7. 150 -> 160 (距10)<br>
                 8. 160 -> 180 (距20)<br>
                 9. 180 -> 190 (距10)<br>
                 10. 190 -> 200 (距10)<br>
             </div>
 
-            <p class="red-pen mt-3">
+            <p class="mt-3">
                 <strong>1. 访问顺序：</strong><br>
                 120 → 90 → 80 → 70 → 60 → 50 → 150 → 160 → 180 → 190 → 200<br>
                 <br>
@@ -411,36 +397,36 @@
 
     <!-- Q9: PV Semaphores -->
     <div class="mb-10 page-break-inside-avoid">
-        <h3 class="text-lg font-bold mb-3 border-l-4 border-gray-800 pl-3">九、PV原语 - 仓库搬运 (来源: 9.10.jpg)</h3>
-        <div class="p-4 bg-gray-50 rounded mb-4 text-sm">
+        <h3 class="text-lg font-bold mb-3 border-l-4 border-gray-800 pl-3">六、PV原语 - 仓库搬运</h3>
+        <div class="p-4 bg-gray-50 rounded mb-4 text-sm border border-gray-200">
             <p>货架容量 3。A 放货 (1个), B 取货 (1个)。<br>
                规则：(1) 未满A才放 (2) 未空B才取 (3) A/B 互斥进行。</p>
         </div>
 
-        <div class="answer-block">
-            <p class="red-pen"><strong>解：经典的生产者-消费者问题变种。</strong></p>
+        <div class="red-pen-block">
+            <p><strong>解：经典的生产者-消费者问题变种。</strong></p>
             
-            <p class="red-pen mt-2"><strong>1. 信号量定义及初值：</strong></p>
-            <div class="font-mono text-sm ml-4 text-black">
-                semaphore empty = 3;  <span class="red-pen text-sm">// 剩余空位，初值为容量</span><br>
-                semaphore full = 0;   <span class="red-pen text-sm">// 现有货物，初值为0</span><br>
-                semaphore mutex = 1;  <span class="red-pen text-sm">// 互斥信号量，保护货架操作</span>
+            <p class="mt-2"><strong>1. 信号量定义及初值：</strong></p>
+            <div class="font-mono text-sm ml-4 text-black font-bold" style="font-family: 'JetBrains Mono', monospace;">
+                semaphore empty = 3;  <span class="red-pen text-sm">// 剩余空位</span><br>
+                semaphore full = 0;   <span class="red-pen text-sm">// 现有货物</span><br>
+                semaphore mutex = 1;  <span class="red-pen text-sm">// 互斥锁</span>
             </div>
 
-            <p class="red-pen mt-4"><strong>2. 进程逻辑描述：</strong></p>
+            <p class="mt-4"><strong>2. 进程逻辑描述：</strong></p>
             <div class="grid grid-cols-2 gap-4 mt-2">
                 <div class="border border-red-300 p-2">
                     <p class="font-bold text-center text-black mb-2">工人 A (放货)</p>
                     <pre class="font-mono text-xs text-black leading-relaxed">
 while(true) {
     准备货物;
-    <span class="text-blue-700 font-bold">P(empty);</span>  // 检查有无空位
-    <span class="text-blue-700 font-bold">P(mutex);</span>  // 申请互斥锁
+    <span class="text-blue-700 font-bold">P(empty);</span>
+    <span class="text-blue-700 font-bold">P(mutex);</span>
     
     放入1个货物;
 
-    <span class="text-blue-700 font-bold">V(mutex);</span>  // 释放互斥锁
-    <span class="text-blue-700 font-bold">V(full);</span>   // 增加货物计数
+    <span class="text-blue-700 font-bold">V(mutex);</span>
+    <span class="text-blue-700 font-bold">V(full);</span>
 }
                     </pre>
                 </div>
@@ -448,13 +434,13 @@ while(true) {
                     <p class="font-bold text-center text-black mb-2">工人 B (取货)</p>
                     <pre class="font-mono text-xs text-black leading-relaxed">
 while(true) {
-    <span class="text-blue-700 font-bold">P(full);</span>   // 检查有无货物
-    <span class="text-blue-700 font-bold">P(mutex);</span>  // 申请互斥锁
+    <span class="text-blue-700 font-bold">P(full);</span>
+    <span class="text-blue-700 font-bold">P(mutex);</span>
     
     取走1个货物;
 
-    <span class="text-blue-700 font-bold">V(mutex);</span>  // 释放互斥锁
-    <span class="text-blue-700 font-bold">V(empty);</span>  // 增加空位计数
+    <span class="text-blue-700 font-bold">V(mutex);</span>
+    <span class="text-blue-700 font-bold">V(empty);</span>
     使用货物;
 }
                     </pre>
@@ -468,14 +454,12 @@ while(true) {
 
 <script>
     function exportHTML() {
-        // Clone the document to clear the 'show-answer' class for the exported version if desired,
-        // or keep it based on user preference. Here we export exactly what is seen.
         const htmlContent = document.documentElement.outerHTML;
         const blob = new Blob([htmlContent], {type: 'text/html'});
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'OS_Exam_Training_Solved.html';
+        a.download = 'OS_Calculation_Exam_Pure.html';
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
