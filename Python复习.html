@@ -1,551 +1,683 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head>
-<meta charset="utf-8">
-<meta content="width=device-width, initial-scale=1.0" name="viewport">
-<title>Python复习 - 模拟考试卷 (已批改)</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com" rel="preconnect">
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
-<!-- Introducing 'Ma Shan Zheng' for handwriting style and 'Noto Serif SC' for printed text -->
-<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&amp;family=Noto+Serif+SC:wght@400;700&amp;display=swap" rel="stylesheet">
-<style>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Python 程序设计期末复习卷（完整版）</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+    <!-- 引入手写字体(Ma Shan Zheng)用于红笔效果，Noto Serif SC用于正文 -->
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0" rel="stylesheet">
+    <style>
         body {
             background-color: #f3f4f6;
+            font-family: 'Noto Serif SC', serif;
+            color: #1f2937;
         }
-        
-        .exam-paper {
+        .paper {
             background-color: white;
             width: 210mm;
             min-height: 297mm;
-            margin: 40px auto;
+            margin: 20px auto;
             padding: 20mm;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-            font-family: 'Noto Serif SC', serif;
-            color: #1f2937;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             position: relative;
         }
-
-        /* Normal input lines */
-        .input-line {
-            border: none;
-            border-bottom: 1px solid #000;
-            outline: none;
-            background: transparent;
-            padding: 0 5px;
-        }
-
-        /* Red Pen Answer Style */
-        .answer-red {
+        /* 红笔手写风格 */
+        .red-pen {
             font-family: 'Ma Shan Zheng', cursive;
             color: #dc2626; /* Red-600 */
-            font-size: 1.3rem;
-            border-bottom: 1px solid #dc2626;
-            background-color: rgba(254, 226, 226, 0.1);
+            font-size: 1.2em;
+            transform: rotate(-0.5deg);
+            display: inline-block;
+            margin-left: 0.5rem;
         }
-
-        .code-block {
-            font-family: 'Courier New', Courier, monospace;
-            background-color: #f9fafb;
-            padding: 10px;
-            border: 1px solid #e5e7eb;
+        /* 题型标签 */
+        .q-tag {
+            font-size: 0.75rem;
+            background-color: #e5e7eb;
+            color: #374151;
+            padding: 1px 6px;
             border-radius: 4px;
-            margin: 10px 0;
+            margin-right: 8px;
+            font-family: sans-serif;
+            vertical-align: middle;
+        }
+        /* 解析区域 */
+        .explanation {
+            margin-top: 4px;
+            padding: 4px 8px;
+            background-color: #fff1f2; /* Rose-50 */
+            border-left: 3px solid #f43f5e;
+            color: #881337;
+            font-size: 0.85em;
+            display: block; /* 默认显示，通过JS控制隐藏 */
+        }
+        .code-block {
+            font-family: 'Consolas', 'Monaco', monospace;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 8px;
+            border-radius: 4px;
+            margin-top: 4px;
+            font-size: 0.9em;
             white-space: pre-wrap;
         }
-
-        /* Analysis Text Style */
-        .analysis {
-            font-size: 0.75rem; /* text-xs */
-            color: #6b7280; /* text-gray-500 */
-            margin-top: 4px;
-            font-family: sans-serif;
-            border-left: 2px solid #e5e7eb;
-            padding-left: 8px;
+        .book-problem {
+            border: 2px dashed #3b82f6;
+            background-color: #eff6ff;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 12px;
+            margin-bottom: 12px;
         }
-        
-        .analysis strong {
-            color: #4b5563;
-        }
-
-        #saveBtn {
-            transition: all 0.3s ease;
-        }
-        #saveBtn:hover {
-            transform: scale(1.05);
-        }
-
         @media print {
             body { background: none; }
-            .exam-paper { margin: 0; box-shadow: none; width: 100%; }
-            #saveBtn { display: none; }
+            .paper { margin: 0; box-shadow: none; width: 100%; padding: 10mm; }
+            .no-print { display: none; }
+            .explanation { display: block !important; } /* 打印时显示解析 */
         }
     </style>
-<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.fixed{position:fixed}.relative{position:relative}.left-5{left:1.25rem}.top-5{top:1.25rem}.z-50{z-index:50}.mb-2{margin-bottom:0.5rem}.mb-4{margin-bottom:1rem}.mb-8{margin-bottom:2rem}.ml-2{margin-left:0.5rem}.ml-4{margin-left:1rem}.mt-12{margin-top:3rem}.mt-2{margin-top:0.5rem}.mt-4{margin-top:1rem}.inline-block{display:inline-block}.flex{display:flex}.grid{display:grid}.h-16{height:4rem}.h-20{height:5rem}.h-24{height:6rem}.h-32{height:8rem}.h-5{height:1.25rem}.w-1\/2{width:50%}.w-16{width:4rem}.w-20{width:5rem}.w-40{width:10rem}.w-5{width:1.25rem}.w-60{width:15rem}.w-full{width:100%}.resize-none{resize:none}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-end{justify-content:flex-end}.gap-2{gap:0.5rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-y-1 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.rounded{border-radius:0.25rem}.border{border-width:1px}.border-b-2{border-bottom-width:2px}.border-l-4{border-left-width:4px}.border-t-2{border-top-width:2px}.border-black{--tw-border-opacity:1;border-color:rgb(0 0 0 / var(--tw-border-opacity, 1))}.border-gray-800{--tw-border-opacity:1;border-color:rgb(31 41 55 / var(--tw-border-opacity, 1))}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.bg-gray-100{--tw-bg-opacity:1;background-color:rgb(243 244 246 / var(--tw-bg-opacity, 1))}.p-2{padding:0.5rem}.p-4{padding:1rem}.px-4{padding-left:1rem;padding-right:1rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.pb-4{padding-bottom:1rem}.pl-4{padding-left:1rem}.pt-4{padding-top:1rem}.text-center{text-align:center}.font-mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.font-bold{font-weight:700}.text-red-600{--tw-text-opacity:1;color:rgb(220 38 38 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.hover\:bg-blue-700:hover{--tw-bg-opacity:1;background-color:rgb(29 78 216 / var(--tw-bg-opacity, 1))}</style></head>
+</head>
 <body>
-<!-- Fixed Save Button -->
 
-<div class="exam-paper" id="examPaper">
-<!-- Header -->
-<div class="text-center border-b-2 border-black pb-4 mb-8">
-<h1 class="text-3xl font-bold mb-2">Python 期末复习模拟试题</h1>
-<!-- Name and Student ID removed as requested -->
-<div class="flex justify-end text-sm mt-4">
-<span class="text-xl font-bold">成绩：<span class="text-red-600 font-handwriting text-4xl">98</span></span>
+<!-- 悬浮控制按钮 -->
+<div class="fixed top-4 left-4 flex flex-col gap-3 z-50 no-print">
+    <button class="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700 transition font-sans" onclick="exportHTML()">
+        <span class="material-symbols-outlined">save</span>
+        保存试卷
+    </button>
+    <button class="flex items-center gap-2 bg-gray-600 text-white px-4 py-2 rounded shadow hover:bg-gray-700 transition font-sans" onclick="toggleAnswers()">
+        <span class="material-symbols-outlined">visibility_off</span>
+        <span id="toggle-text">显示/隐藏答案与解析</span>
+    </button>
 </div>
-</div>
-<!-- Chapter 1 -->
-<div class="mb-8">
-<h2 class="text-xl font-bold mb-4 bg-gray-100 p-2 border-l-4 border-gray-800">第一章：Python 概述</h2>
-<div class="mb-4">
-<p class="font-bold">1. 简述 Python 语言的优点：</p>
-<textarea class="input-line answer-red w-full h-24 resize-none mt-2">简单易学、开发效率高、拥有丰富的第三方库、开源免费、跨平台、可扩展性强（胶水语言）、面向对象。</textarea>
-<div class="analysis"><strong>解析：</strong>Python以语法简洁著称，适合快速开发，且生态系统庞大（NumPy, Pandas等）。</div>
-</div>
-</div>
-<!-- Chapter 2 -->
-<div class="mb-8">
-<h2 class="text-xl font-bold mb-4 bg-gray-100 p-2 border-l-4 border-gray-800">第二章：基础语法</h2>
-<div class="space-y-6">
-<div>
-<p>1. 下列标识符中，不符合 Python 命名规则的是（  ）</p>
-<div class="ml-4 space-y-1 relative">
-<label><input name="q2_1" type="radio"> A. _age</label><br>
-<label><input checked="checked" name="q2_1" type="radio"> B. 123char <span class="text-red-600 font-bold ml-2">✓</span></label><br>
-<label><input name="q2_1" type="radio"> C. Char123</label><br>
-<label><input name="q2_1" type="radio"> D. MyName</label><br>
-<label><input name="q2_1" type="radio"> E. pass</label>
-</div>
-<div class="analysis"><strong>解析：</strong>标识符不能以数字开头（B错误）；pass是Python保留关键字（E也错误，但在单选题中通常考察命名规范，B最为典型）。</div>
-</div>
-<div>
-<p>2. 下面代码的执行结果是（  ）</p>
-<div class="code-block">&gt;&gt;&gt;x=3
-&gt;&gt;&gt;x*=2+4**2
-&gt;&gt;&gt;print(x)</div>
-<input class="input-line answer-red w-1/2" type="text" value="54">
-<div class="analysis"><strong>解析：</strong>优先级：** &gt; + &gt; *=。先算 4**2=16，再算 2+16=18，最后 x = 3 * 18 = 54。</div>
-</div>
-<div>
-<p>3. 在python当中，下列表达式非法的是（  ）</p>
-<div class="ml-4 space-y-1">
-<label><input name="q2_3" type="radio"> A .x=y=z=1</label><br>
-<label><input name="q2_3" type="radio"> B.x,y=y,z</label><br>
-<label><input checked="checked" name="q2_3" type="radio"> C.x=(y=z+1) <span class="text-red-600 font-bold ml-2">✓</span></label><br>
-<label><input name="q2_3" type="radio"> D.x+=y</label>
-</div>
-<div class="analysis"><strong>解析：</strong>Python中赋值是语句（Statement）不是表达式（Expression），没有返回值，因此不能写在括号内赋值给x。</div>
-</div>
-<div>
-<p>4. 假设s = "Life is beautiful"，则s[3:8]的值为：<input class="input-line answer-red w-40 inline-block" type="text" value="'e is '"></p>
-<div class="analysis"><strong>解析：</strong>索引从0开始。索引3是'e'，索引8是'b'。切片[3:8]包含3不包含8，即3,4,5,6,7 -&gt; "e", " ", "i", "s", " "。</div>
-</div>
-<div>
-<p>5. type(2+3*4.34)的结果是（  ） <input class="input-line answer-red w-40 inline-block" type="text" value="float"></p>
-<div class="analysis"><strong>解析：</strong>运算中包含浮点数4.34，结果自动提升为浮点型。</div>
-</div>
-<div>
-<p>6. 不符合下面程序横线中语法要求的表达式是（  ）</p>
-<div class="code-block">for i in ________:
-    print(i)</div>
-<div class="ml-4 flex gap-4 flex-wrap">
-<label><input name="q2_6" type="radio"> A .range(0,20)</label>
-<label><input name="q2_6" type="radio"> B."python"</label>
-<label><input name="q2_6" type="radio"> C. (3,4,5)</label>
-<label><input checked="checked" name="q2_6" type="radio"> D.{3,4,5} <span class="text-red-600 font-bold ml-2">✓</span></label>
-</div>
-<div class="analysis"><strong>解析：</strong>其实ABCD语法上均合法。但集合（Set）是无序的，通常不被视为“序列”（Sequence），在强调顺序的语境下可能是出题意图的答案。</div>
-</div>
-<div>
-<p>7. 哪个模块提供了数学计算功能? <input class="input-line answer-red w-40 inline-block" type="text" value="math"></p>
-</div>
-<div>
-<p>8. Python支持的数据类型有float、list、int等，char支不支持? <input class="input-line answer-red w-20 inline-block" type="text" value="不支持"></p>
-<div class="analysis"><strong>解析：</strong>Python没有单独的char类型，字符即长度为1的字符串(str)。</div>
-</div>
-<div>
-<p>9. 执行print("2" * 2 + str(6))的结果是（     ）。<input class="input-line answer-red w-40 inline-block" type="text" value="226"></p>
-<div class="analysis"><strong>解析：</strong>"2"*2得到"22"，str(6)得到"6"，"22"+"6"="226"。</div>
-</div>
-<div>
-<p>10. 若x = 21.3, y = "10"，则float(y) + x的结果是（     ）。<input class="input-line answer-red w-40 inline-block" type="text" value="31.3"></p>
-<div class="analysis"><strong>解析：</strong>10.0 + 21.3 = 31.3。</div>
-</div>
-<div>
-<p>11. 字符串切片示例：str1="sdfugwrf"，则print(str1[::-2])的结果是？<input class="input-line answer-red w-40 inline-block" type="text" value="fwud"></p>
-<div class="analysis"><strong>解析：</strong>步长-2表示倒序每隔一个取值。原倒序为frwgufds，取索引0,2,4,6 -&gt; f, w, u, d。</div>
-</div>
-<div>
-<p>12. Python中，字符串“中华大地”的长度是？<input class="input-line answer-red w-20 inline-block" type="text" value="4"></p>
-<div class="analysis"><strong>解析：</strong>Python 3中字符串为Unicode，一个汉字长度为1。</div>
-</div>
-<div>
-<p>13. Python 3.x 语句 print(3, 4, 5, sep=';')的输出结果为__________。<input class="input-line answer-red w-40 inline-block" type="text" value="3;4;5"></p>
-<div class="analysis"><strong>解析：</strong>sep参数指定分隔符。</div>
-</div>
-<div>
-<p>14. 表达式 4&lt;6&gt;3 的值为_______________。<input class="input-line answer-red w-40 inline-block" type="text" value="True"></p>
-<div class="analysis"><strong>解析：</strong>链式比较：等价于 (4&lt;6) and (6&gt;3)，即 True and True。</div>
-</div>
-<div>
-<p>15. 表达式'banana,apple,peach'.index('na')的值为__________。<input class="input-line answer-red w-40 inline-block" type="text" value="2"></p>
-<div class="analysis"><strong>解析：</strong>找到第一个'na'出现的起始索引，b(0)a(1)n(2)。</div>
-</div>
-<div>
-<p>16. input("请输入：")时，用户输入的内容默认是什么类型？<input class="input-line answer-red w-40 inline-block" type="text" value="str (字符串)"></p>
-</div>
-<div>
-<p>17. 20 // 3 = <input class="input-line answer-red w-16 inline-block" type="text" value="6">，20 % 3 = <input class="input-line answer-red w-16 inline-block" type="text" value="2">，-18 // 5 = <input class="input-line answer-red w-16 inline-block" type="text" value="-4"></p>
-<div class="analysis"><strong>解析：</strong>-18除以5等于-3.6，向下取整为-4。</div>
-</div>
-<div>
-<p>18. '356afrg'.islower()的值为______________。<input class="input-line answer-red w-40 inline-block" type="text" value="True"></p>
-<div class="analysis"><strong>解析：</strong>islower()忽略数字，只要所有字母都是小写即返回True。</div>
-</div>
-<div>
-<p>19. 执行语句 a, b, c = 'XYZ'之后，变量 a 的值为____________<input class="input-line answer-red w-40 inline-block" type="text" value="'X'"></p>
-</div>
-<div>
-<p>20. 表达式'gh' in 'dfggth'的值为_____________。<input class="input-line answer-red w-40 inline-block" type="text" value="False"></p>
-<div class="analysis"><strong>解析：</strong>原字符串中是'gg'和'gt'，不存在连续的'gh'。</div>
-</div>
-</div>
-</div>
-<!-- Chapter 3 -->
-<div class="mb-8">
-<h2 class="text-xl font-bold mb-4 bg-gray-100 p-2 border-l-4 border-gray-800">第三章：程序控制结构</h2>
-<div class="space-y-6">
-<div>
-<p>1. 循环 for i in range(2, 7, 2) 执行时，i 的值依次是？<input class="input-line answer-red w-full inline-block" type="text" value="2, 4, 6"></p>
-</div>
-<div>
-<p>2. 以下代码的输出结果是?</p>
-<div class="code-block">&gt;&gt;&gt;a="3"
-&gt;&gt;&gt;b=2
-&gt;&gt;&gt;print(a+b)</div>
-<input class="input-line answer-red w-full inline-block" type="text" value="报错 (TypeError)">
-<div class="analysis"><strong>解析：</strong>字符串和整数不能直接相加。</div>
-</div>
-<div>
-<p>3. 以下选项中，描述错误的是?</p>
-<div class="ml-4 space-y-1">
-<label><input name="q3_3" type="radio"> A. continue语句通常与循环语句一起使用</label><br>
-<label><input checked="checked" name="q3_3" type="radio"> B. continue语句用于结束本次循环 <span class="text-red-600 font-bold ml-2">✓</span></label><br>
-<label><input name="q3_3" type="radio"> C. break语句用于中断程序</label><br>
-<label><input name="q3_3" type="radio"> D. break语句用于中断循环</label>
-</div>
-<div class="analysis"><strong>解析：</strong>题目可能有些歧义，但通常C是错的（break中断循环而非整个程序）。B的描述也不够严谨（应为结束“当次”循环进入下一次），但在单选中C错误最明显。如果非要选最“描述错误”的，C最不准确。</div>
-</div>
-<div>
-<p>4. 以下代码的循环多少次？</p>
-<div class="code-block">for i in range(1, 10, 2):
- print(i)</div>
-<input class="input-line answer-red w-20 inline-block" type="text" value="5">
-<div class="analysis"><strong>解析：</strong>1, 3, 5, 7, 9。共5次。</div>
-</div>
-<div>
-<p>5. 结构化程序的三种基本控制结构是：<input class="input-line answer-red w-full inline-block" type="text" value="顺序结构、选择结构、循环结构"></p>
-</div>
-<div>
-<p>6. 在循环语句中，提前进入下一次循环是哪个语句？<input class="input-line answer-red w-40 inline-block" type="text" value="continue"></p>
-</div>
-<div>
-<p>7. 表达式 sum(map(int, str(36437)))的值为____________。<input class="input-line answer-red w-40 inline-block" type="text" value="23"></p>
-<div class="analysis"><strong>解析：</strong>将各数位转为int求和：3+6+4+3+7=23。</div>
-</div>
-<!-- Code Analysis Blocks -->
-<div class="grid grid-cols-1 gap-6">
-<div class="border p-4 rounded">
-<p class="font-bold mb-2">阅读代码 1：输出结果是？</p>
-<div class="code-block">colors = ('红', '蓝')
+
+<div class="paper">
+    <!-- 试卷抬头 -->
+    <div class="text-center border-b-2 border-gray-800 pb-6 mb-8 relative">
+        <h1 class="text-3xl font-bold mb-2">Python 程序设计 期末复习卷</h1>
+        <div class="flex justify-center gap-8 text-sm text-gray-600 mt-4 font-sans">
+            <span>适用范围：第一章 至 第七章</span>
+            <span>题源：复习文档 + 教材重点题</span>
+        </div>
+        <!-- 模拟打分印章 -->
+        <div class="absolute top-0 right-0 border-4 border-red-600 rounded-full w-24 h-24 flex items-center justify-center transform rotate-12 opacity-80 red-pen" style="font-size: 2.5rem;">
+            满分
+        </div>
+    </div>
+
+    <!-- 第一章 -->
+    <div class="mb-6">
+        <h2 class="text-xl font-bold mb-4 border-l-4 border-gray-800 pl-3">第一章：Python 概述</h2>
+        <div class="space-y-4">
+            <div>
+                <span class="q-tag">简答题</span>
+                <strong>1. Python语言的优点有哪些？</strong>
+                <div class="red-pen explanation-block">
+                    答：<br>
+                    1. 简单易学，语法清晰。<br>
+                    2. 免费开源，拥有丰富的标准库和第三方库。<br>
+                    3. 高级语言，无需关注底层内存管理。<br>
+                    4. 可移植性强（跨平台）。<br>
+                    5. 解释型语言，开发效率高。<br>
+                    6. 支持面向对象编程。<br>
+                    7. 可嵌入性（C/C++）与可扩展性。
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第二章 -->
+    <div class="mb-6">
+        <h2 class="text-xl font-bold mb-4 border-l-4 border-gray-800 pl-3">第二章：数据类型与表达式</h2>
+        <div class="space-y-3">
+            <div>
+                <span class="q-tag">选择题</span>
+                1. 下列标识符中，不符合 Python 命名规则的是 (<span class="red-pen"> B, E </span>)
+                <div class="ml-6 text-sm text-gray-600">
+                    A. _age &nbsp;&nbsp; B. 123char &nbsp;&nbsp; C. Char123 &nbsp;&nbsp; D. MyName &nbsp;&nbsp; E. pass
+                </div>
+                <div class="explanation explanation-block">解析：B以数字开头；E是保留关键字。</div>
+            </div>
+
+            <div>
+                <span class="q-tag">代码题</span>
+                2. 下面代码的执行结果是 <span class="red-pen"> 54 </span>
+                <div class="code-block text-xs">>>>x=3
+>>>x*=2+4**2
+>>>print(x)</div>
+                <div class="explanation explanation-block">解析：优先级 ** > + > *=。先算 4**2=16，再算 2+16=18，最后 x = 3 * 18 = 54。</div>
+            </div>
+
+            <div>
+                <span class="q-tag">选择题</span>
+                3. 在python当中，下列表达式非法的是 (<span class="red-pen"> C </span>)
+                <div class="ml-6 text-sm text-gray-600">
+                    A. x=y=z=1 &nbsp;&nbsp; B. x,y=y,z &nbsp;&nbsp; C. x=(y=z+1) &nbsp;&nbsp; D. x+=y
+                </div>
+                <div class="explanation explanation-block">解析：Python赋值语句不能作为表达式返回值。</div>
+            </div>
+
+            <div>
+                <span class="q-tag">填空题</span>
+                4. 假设 s = “Life is beautiful”，则 s[3:8] 的值为：<span class="red-pen underline"> "e is " </span>
+                <div class="explanation explanation-block">解析：切片含头不含尾，下标3是'e'，下标8是'b'（不含），注意空格。</div>
+            </div>
+
+            <div>
+                <span class="q-tag">选择题</span>
+                5. type(2+3*4.34)的结果是 (<span class="red-pen"> float </span>)
+                <div class="explanation explanation-block">解析：包含浮点数的运算结果自动提升为浮点型。</div>
+            </div>
+
+            <div>
+                <span class="q-tag">选择题</span>
+                6. 不符合下面程序横线中语法要求的表达式是 (<span class="red-pen"> 无/D </span>)
+                <div class="ml-6 text-sm text-gray-600">
+                    for i in ________:<br>print(i)<br>
+                    A .range(0,20) &nbsp;&nbsp; B.“python” &nbsp;&nbsp; C. (3,4,5) &nbsp;&nbsp; D.{3,4,5}
+                </div>
+                <div class="explanation explanation-block">解析：严格来说ABCD都是可迭代对象，语法都正确。通常考题意图可能是考察无序性，D是集合无序，但语法不报错。</div>
+            </div>
+
+            <div>
+                <span class="q-tag">填空题</span>
+                7. 哪个模块提供了数学计算功能? <span class="red-pen underline"> math </span>
+            </div>
+
+            <div>
+                <span class="q-tag">简答题</span>
+                8. Python支持的数据类型有float、list、int等，char支不支持? <span class="red-pen underline"> 不支持 (用长度为1的str表示) </span>
+            </div>
+
+            <div>
+                <span class="q-tag">计算题</span>
+                9. 执行 print("2" * 2 + str(6)) 的结果是 (<span class="red-pen"> "226" </span>)
+                <div class="explanation explanation-block">解析："2"*2="22", str(6)="6", 拼接得"226"。</div>
+            </div>
+
+            <div>
+                <span class="q-tag">计算题</span>
+                10. 若 x = 21.3, y = "10"，则 float(y) + x 的结果是 (<span class="red-pen"> 31.3 </span>)
+            </div>
+
+            <div>
+                <span class="q-tag">填空题</span>
+                11. 字符串切片示例：str1="sdfugwrf"，则 print(str1[::-2]) 的结果是？ <span class="red-pen underline"> "fwud" </span>
+                <div class="explanation explanation-block">解析：倒序每隔一个取值。f(末) -> w -> u -> d。</div>
+            </div>
+
+            <div>
+                <span class="q-tag">填空题</span>
+                12. Python中，字符串“中华大地”的长度是？ <span class="red-pen underline"> 4 </span>
+            </div>
+
+            <div>
+                <span class="q-tag">填空题</span>
+                13. Python 3.x 语句 print(3, 4, 5, sep=';') 的输出结果为 <span class="red-pen underline"> 3;4;5 </span>
+            </div>
+
+            <div>
+                <span class="q-tag">判断题</span>
+                14. 表达式 4<6>3 的值为 <span class="red-pen underline"> True </span>
+                <div class="explanation explanation-block">解析：等价于 4<6 and 6>3。</div>
+            </div>
+
+            <div>
+                <span class="q-tag">填空题</span>
+                15. 表达式 'banana,apple,peach'.index('na') 的值为 <span class="red-pen underline"> 2 </span>
+            </div>
+
+            <div>
+                <span class="q-tag">填空题</span>
+                16. input("请输入：")时，用户输入的内容默认是什么类型？ <span class="red-pen underline"> str (字符串) </span>
+            </div>
+
+            <div>
+                <span class="q-tag">计算题</span>
+                17. 20 // 3 = <span class="red-pen"> 6 </span>，20 % 3 = <span class="red-pen"> 2 </span>，-18 // 5 = <span class="red-pen"> -4 </span>
+                <div class="explanation explanation-block">解析：整除向下取整，-3.6 向下取整为 -4。</div>
+            </div>
+
+            <div>
+                <span class="q-tag">填空题</span>
+                18. '356afrg'.islower() 的值为 <span class="red-pen underline"> True </span>
+            </div>
+
+            <div>
+                <span class="q-tag">填空题</span>
+                19. 执行语句 a, b, c = 'XYZ' 之后，变量 a 的值为 <span class="red-pen underline"> 'X' </span>
+            </div>
+            
+            <div>
+                <span class="q-tag">判断题</span>
+                20. 表达式 'gh' in 'dfggth' 的值为 <span class="red-pen underline"> False </span>
+                <div class="explanation explanation-block">解析：原字符串中是 'gg' 不是 'gh'。</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第三章 -->
+    <div class="mb-6">
+        <h2 class="text-xl font-bold mb-4 border-l-4 border-gray-800 pl-3">第三章：循环与控制流</h2>
+        <div class="space-y-3">
+            <div>
+                <span class="q-tag">填空题</span>
+                1. 循环 for i in range(2, 7, 2) 执行时，i 的值依次是？ <span class="red-pen underline"> 2, 4, 6 </span>
+            </div>
+
+            <div>
+                <span class="q-tag">代码题</span>
+                2. 以下代码的输出结果是? <span class="red-pen"> 报错 (TypeError) </span>
+                <div class="code-block text-xs">>>>a="3"
+>>>b=2
+>>>print(a+b)</div>
+                <div class="explanation explanation-block">解析：字符串不能直接与整数相加。</div>
+            </div>
+
+            <div>
+                <span class="q-tag">选择题</span>
+                3. 以下选项中，描述错误的是 (<span class="red-pen"> C </span>)
+                <div class="ml-6 text-sm text-gray-600">
+                    A. continue语句通常与循环语句一起使用<br>
+                    B. continue语句用于结束本次循环<br>
+                    C. break语句用于中断程序<br>
+                    D . break语句用于中断循环
+                </div>
+                <div class="explanation explanation-block">解析：break是跳出循环，不是终止整个程序的运行。</div>
+            </div>
+
+            <div>
+                <span class="q-tag">填空题</span>
+                4. 以下代码循环 <span class="red-pen underline"> 5 </span> 次
+                <div class="code-block text-xs">for i in range(1, 10, 2): print(i)</div>
+            </div>
+
+            <div>
+                <span class="q-tag">填空题</span>
+                5. 结构化程序的三种基本控制结构是顺序、<span class="red-pen underline"> 选择 </span> 和 <span class="red-pen underline"> 循环 </span>。
+            </div>
+
+            <div>
+                <span class="q-tag">填空题</span>
+                6. 在循环语句中，提前进入下一次循环是哪个语句？ <span class="red-pen underline"> continue </span>
+            </div>
+
+            <div>
+                <span class="q-tag">计算题</span>
+                7. 表达式 sum(map(int, str(36437))) 的值为 <span class="red-pen underline"> 23 </span>
+                <div class="explanation explanation-block">解析：将数字转字符串，再映射为int列表求和：3+6+4+3+7=23。</div>
+            </div>
+
+            <div>
+                <span class="q-tag">代码题</span>
+                8. 以下代码的输出结果是？ <span class="red-pen"> 绿花、绿天和白云构成了美丽的画面 </span>
+                <div class="code-block text-xs">colors = ('红', '蓝')
 desc = '红花、蓝天和白云构成了美丽的画面'
 for color in colors:
     if color in desc:
         desc = desc.replace(color, '绿')
 print(desc)</div>
-<input class="input-line answer-red w-full" type="text" value="绿花、绿天和白云构成了美丽的画面">
-<div class="analysis"><strong>解析：</strong>依次将'红'替换为'绿'，再将'蓝'替换为'绿'。</div>
-</div>
-<div class="border p-4 rounded">
-<p class="font-bold mb-2">阅读代码 2：输出结果是？</p>
-<div class="code-block">m = 5
-total, s = 1, 1
+            </div>
+
+            <div>
+                <span class="q-tag">代码题</span>
+                9. 以下代码的输出结果是？ <span class="red-pen"> 153 </span>
+                <div class="code-block text-xs">m = 5; total, s = 1, 1
 for j in range(2, m + 1):
     s *= j
     total += s
 print(total)</div>
-<input class="input-line answer-red w-full" type="text" value="153">
-<div class="analysis"><strong>解析：</strong>计算 1! + 2! + 3! + 4! + 5! = 1 + 2 + 6 + 24 + 120 = 153。</div>
-</div>
-<div class="border p-4 rounded">
-<p class="font-bold mb-2">阅读代码 3：输出结果是？</p>
-<div class="code-block">total = 0
+                <div class="explanation explanation-block">解析：计算 1! + 2! + 3! + 4! + 5! = 1 + 2 + 6 + 24 + 120 = 153。</div>
+            </div>
+
+            <div>
+                <span class="q-tag">代码题</span>
+                10. 以下代码的输出结果是？ <span class="red-pen"> 18 </span>
+                <div class="code-block text-xs">total = 0
 for num in range(1, 11):
-    if num % 3 == 0:
-        total += num
+    if num % 3 == 0: total += num
 print(total)</div>
-<input class="input-line answer-red w-full" type="text" value="18">
-<div class="analysis"><strong>解析：</strong>1-10中3的倍数：3, 6, 9。Sum = 18。</div>
-</div>
-</div>
-<div>
-<p class="font-bold">简答题：</p>
-<p>解释Python中的break和continue语句的作用，并给出一个使用break语句跳出循环的示例代码以及一个使用continue语句跳过某次循环迭代的示例代码。</p>
-<textarea class="input-line answer-red w-full h-32 resize-none mt-2">Break：立即终止当前所在循环，跳出循环体。
-Continue：结束当前当次循环，直接进入下一次循环条件的判断。
-示例：
-for i in range(5):
-    if i == 3: break # 0,1,2 后停止
-for i in range(5):
-    if i == 3: continue # 0,1,2,4 (跳过3)</textarea>
-</div>
-<div>
-<p>for循环和while循环有什么区别？</p>
-<textarea class="input-line answer-red w-full h-20 resize-none mt-2">For循环通常用于遍历序列（如列表、字符串）或已知次数的循环；
-While循环用于条件满足时重复执行，通常用于循环次数未知的场景。</textarea>
-</div>
-</div>
-</div>
-<!-- Chapter 4 -->
-<div class="mb-8">
-<h2 class="text-xl font-bold mb-4 bg-gray-100 p-2 border-l-4 border-gray-800">第四章：函数与代码复用</h2>
-<div class="space-y-6">
-<p>1. 定义函数时，若希望参数为可选参数，应使用（<span class="answer-red"> 默认 </span>）参数？</p>
-<p>2. 函数不一定必须有 return 语句， return可以返回多个值，以元组形式存储。函数返回值也可以是列表（<span class="answer-red"> 正确 </span>）。</p>
-<div>
-<p>3. 递归函数来计算阶乘？请补充代码。</p>
-<div class="code-block">def factorial(n): 
-    if n == 0: 
-        return 1 
-    else: 
-        return <input class="input-line answer-red w-40 inline-block" type="text" value="n * factorial(n-1)"></div>
-</div>
-<p>4. Python中，函数定义可以不包括？（<span class="answer-red"> 可选参数列表 / return语句 </span>）</p>
-<p>5. 关于函数的关键字参数使用限制，函数定义时，关键字参数必须位于位置参数之后。</p>
-<p>6. 已知 f = lambda x: x+3，那么表达式 f(3) 的值为 <input class="input-line answer-red w-20 inline-block" type="text" value="6">。</p>
-<div>
-<p>7. 若使以下程序demo函数中的x来自全局变量x，则空格处应填入是？</p>
-<div class="code-block">x=5
-def test():
-    _____________
-    x = 5
-test()
-print(x)</div>
-<p>答：在函数内部可以通过关键字 <input class="input-line answer-red w-20 inline-block" type="text" value="global"> 来定义全局变量。</p>
-</div>
-<!-- Function Code Analysis -->
-<div class="grid grid-cols-1 gap-4">
-<div class="border p-4">
-<p>代码输出结果？</p>
-<div class="code-block">def fun(s):
-    res = [0, 0]
-    for ch in s:
-        if ch.islower():
-            res[1] += 1
-        elif ch.isupper():
-            res[0] += 1
-    return tuple(res)
-print(fun('I like Myself!'))</div>
-<input class="input-line answer-red w-full" type="text" value="(2, 9)">
-<div class="analysis"><strong>解析：</strong>大写：I, M (2个)。小写：l, i, k, e, y, s, e, l, f (9个)。空格和感叹号忽略。</div>
-</div>
-<div class="border p-4">
-<p>代码输出结果？</p>
-<div class="code-block">def fat(m):
-    if m == 0:
-        return 1
-    else:
-        return m * fat(m-1)
-print(fat(6))</div>
-<input class="input-line answer-red w-full" type="text" value="720">
-</div>
-<div class="border p-4">
-<p>代码输出结果？</p>
-<div class="code-block">dds = [23, 22, 33, 44]  
-dds.insert(1, 25)  
-dds.pop(2)  
-dds.append(40)  
-print(dds[2:4])</div>
-<input class="input-line answer-red w-full" type="text" value="[33, 44]">
-<div class="analysis"><strong>解析：</strong>[23,22,33,44] -&gt; insert 25 -&gt; [23,25,22,33,44] -&gt; pop idx 2(22) -&gt; [23,25,33,44] -&gt; append 40 -&gt; [23,25,33,44,40]。切片[2:4]即idx 2,3 -&gt; [33, 44]。</div>
-</div>
-</div>
-<div>
-<p>P95 递归调用？每个递归函数的两个主要部分？</p>
-<textarea class="input-line answer-red w-full h-16 resize-none">基例（终止条件）和递归链（调用自身）。</textarea>
-</div>
-<div>
-<p>变量作用域中局部变量和全局变量的区别?</p>
-<textarea class="input-line answer-red w-full h-16 resize-none">全局变量在整个程序范围内有效；局部变量仅在定义它的函数内部有效。函数内修改全局变量需用global关键字。</textarea>
-</div>
-<div>
-<p>编程：编写一个函数，参数为一个整数，如果该数为偶数，返回True，否则返回False，并完成函数调用。</p>
-<textarea class="input-line answer-red w-full h-32 resize-none font-mono text-sm">def check_even(num):
-    if num % 2 == 0:
-        return True
-    else:
-        return False
+                <div class="explanation explanation-block">解析：3 + 6 + 9 = 18。</div>
+            </div>
 
-print(check_even(10))</textarea>
-</div>
-</div>
-</div>
-<!-- Chapter 5 -->
-<div class="mb-8">
-<h2 class="text-xl font-bold mb-4 bg-gray-100 p-2 border-l-4 border-gray-800">第五章：组合数据类型（列表与元组）</h2>
-<div class="space-y-4">
-<p>1. 已知x = [1,2,3]，执行语句x.append(4)之后x的值是？<input class="input-line answer-red w-40 inline-block" type="text" value="[1, 2, 3, 4]"></p>
-<p>2. 列表a = [1,2,3,4]，执行a.pop(1)后，a 的值是？<input class="input-line answer-red w-40 inline-block" type="text" value="[1, 3, 4]"></p>
-<p>3. 元组与列表的主要区别是元组元素不可修改。</p>
-<div>
-<p>4. 若tup=(1,2,3) ，则下列选项中不合法的操作是（     ）。</p>
-<div class="flex gap-4 ml-4">
-<label><input name="q5_4" type="radio"> A. tup[1:-1]</label>
-<label><input name="q5_4" type="radio"> B. a*32</label>
-<label><input checked="checked" name="q5_4" type="radio"> C. a[1]=3 <span class="text-red-600 font-bold ml-2">✓</span></label>
-<label><input name="q5_4" type="radio"> D. list(tup)</label>
-</div>
-</div>
-<p>5. 元组t = (5,)的长度是? <input class="input-line answer-red w-20 inline-block" type="text" value="1"></p>
-<p>6. 表达式[4, 2, 2, 7, 1][-2:]的值为___________。<input class="input-line answer-red w-40 inline-block" type="text" value="[7, 1]"></p>
-<p>7. 列表nums = [3, 6, 2, 7]，执行sorted(nums)后，nums 的值是? <input class="input-line answer-red w-40 inline-block" type="text" value="[3, 6, 2, 7]"></p>
-<div class="analysis"><strong>解析：</strong>sorted()返回新列表，不改变原列表。nums.sort()才改变。</div>
-<p>8. 列表生成式[j*3 for j in range(4)]的结果是_____________。<input class="input-line answer-red w-40 inline-block" type="text" value="[0, 3, 6, 9]"></p>
-<p>9. [1,3,2,6,4][::3]的值为_____________。<input class="input-line answer-red w-40 inline-block" type="text" value="[1, 6]"></p>
-<div class="border p-4 mt-2">
-<p>10. 以下代码的输出结果是?</p>
-<div class="code-block">n = 32
-factors = []
-for i in range(1, n+1):
-     if n % i == 0:
-         factors.append(i)
-print(factors)</div>
-<input class="input-line answer-red w-full" type="text" value="[1, 2, 4, 8, 16, 32]">
-<div class="analysis"><strong>解析：</strong>求32的所有因子。</div>
-</div>
-<div class="mt-4">
-<p>列表和元组的相同点和不同点，并给出示例代码创建一个列表和一个元组。</p>
-<textarea class="input-line answer-red w-full h-24 resize-none">相同：都是有序序列，支持索引、切片。
-不同：列表(list)是可变的，用[]；元组(tuple)是不可变的，用()。
-示例：
-lst = [1, 2, 3]
-tup = (1, 2, 3)</textarea>
-</div>
-</div>
-</div>
-<!-- Chapter 6 -->
-<div class="mb-8">
-<h2 class="text-xl font-bold mb-4 bg-gray-100 p-2 border-l-4 border-gray-800">第六章：字典与集合</h2>
-<div class="space-y-4">
-<p>1. 在 Python 中,如何访问字典中的值? <input class="input-line answer-red w-60 inline-block" type="text" value="通过键访问 d[key] 或 d.get(key)"></p>
-<p>2. 字典dic = {"name":"Zhangsan", "age":23}，获取 "age" 对应的值的方式是? <input class="input-line answer-red w-60 inline-block" type="text" value="dic['age'] 或 dic.get('age')"></p>
-<p>3. 字典dic = {"id": 2311, "name": "Mike"}，删除 "id" 键的语句是? <input class="input-line answer-red w-60 inline-block" type="text" value="del dic['id'] 或 dic.pop('id')"></p>
-<p>4. 两个集合：S1={1,2,3,4,5}，S2={4,5,6}</p>
-<div class="pl-4">
-                    S1|S2 = <input class="input-line answer-red w-40 inline-block" type="text" value="{1, 2, 3, 4, 5, 6}"><br>
-                    S1&amp;S2 = <input class="input-line answer-red w-40 inline-block" type="text" value="{4, 5}"><br>
-                    S1^S2 = <input class="input-line answer-red w-40 inline-block" type="text" value="{1, 2, 3, 6}"><br>
-                    S1-S2 = <input class="input-line answer-red w-40 inline-block" type="text" value="{1, 2, 3}">
-</div>
-<div class="border p-4">
-<p>5. 以下代码的输出结果是______________。</p>
-<div class="code-block">z = 'Apple'
-c = dict()                  
-for ch in z:
-        c[ch] = c.get(ch, 0) + 1
-print(c)</div>
-<input class="input-line answer-red w-full" type="text" value="{'A': 1, 'p': 2, 'l': 1, 'e': 1}">
-<div class="analysis"><strong>解析：</strong>统计字符出现频率。</div>
-</div>
-<div class="border p-4">
-<p>6. 以下代码的输出结果是______________。</p>
-<div class="code-block">info = {"city": "Beijing", "zipcode": 100000}
-if "country" in info:
-    print(info["country"])
+            <div>
+                <span class="q-tag">简答题</span>
+                11. 解释Python中的break和continue语句的作用，并给出一个示例。
+                <div class="red-pen explanation-block">
+                    答：<br>
+                    - <strong>break</strong>：立即终止当前所在循环，跳出循环体。<br>
+                    - <strong>continue</strong>：跳过本次循环剩余代码，直接进入下一次迭代。<br>
+                    <span class="text-xs text-gray-600">
+                    示例：<br>
+                    for i in range(5):<br>
+                        if i == 2: continue # 跳过2<br>
+                        if i == 4: break    # 到4结束<br>
+                        print(i) # 输出 0, 1, 3
+                    </span>
+                </div>
+            </div>
+
+            <div>
+                <span class="q-tag">简答题</span>
+                12. for循环和while循环有什么区别？
+                <div class="red-pen explanation-block">
+                    答：<br>
+                    - <strong>for循环</strong>：主要用于遍历已知序列（如列表、字符串）或固定范围（range）。<br>
+                    - <strong>while循环</strong>：主要用于在满足特定条件时重复执行，直到条件不再满足，通常用于循环次数不确定的情况。
+                </div>
+            </div>
+
+            <div class="book-problem page-break-inside-avoid">
+                <div class="font-bold text-blue-800 flex items-center gap-2 mb-2">
+                    <span class="material-symbols-outlined">menu_book</span> 书本 P79 (2) 编程题
+                </div>
+                <div class="text-sm mb-2">要求：<br>1. 筛选面试者（计算机&lt;25，电子经验>4，通信无要求）。<br>2. 输出2000-3000年所有闰年。</div>
+                <div class="red-pen explanation-block">
+<pre class="code-block font-sans">
+# 1. 面试筛选
+age = int(input("年龄:")); major = input("专业:"); exp = int(input("经验:"))
+if (major == "计算机" and age < 25) or \
+   (major == "电子" and exp > 4) or \
+   (major == "通信"):
+    print("获得面试机会")
 else:
-    print("Unknow")</div>
-<input class="input-line answer-red w-full" type="text" value="Unknow">
+    print("抱歉，不符合")
+
+# 2. 闰年输出
+for y in range(2000, 3001):
+    if (y % 4 == 0 and y % 100 != 0) or (y % 400 == 0):
+        print(y, end=" ")
+</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第四章 -->
+    <div class="mb-6">
+        <h2 class="text-xl font-bold mb-4 border-l-4 border-gray-800 pl-3">第四章：函数</h2>
+        <div class="space-y-3">
+            <div>
+                <span class="q-tag">填空题</span>
+                1. 定义函数时，若希望参数为可选参数，应使用 <span class="red-pen underline"> 默认参数 (Default Argument) </span>
+            </div>
+            <div>
+                <span class="q-tag">判断题</span>
+                2. 函数不一定必须有 return 语句， return可以返回多个值，以元组形式存储。函数返回值也可以是列表。 <span class="red-pen underline"> ( √ ) </span>
+            </div>
+            <div>
+                <span class="q-tag">代码阅读</span>
+                3. 递归函数来计算阶乘？ <span class="red-pen"> 是，这是递归结构 </span>
+                <div class="code-block text-xs">def factorial(n):
+    if n == 0: return 1
+    else: return n * factorial(n-1)</div>
+            </div>
+            <div>
+                <span class="q-tag">填空题</span>
+                4. Python中，函数定义可以不包括？ <span class="red-pen underline"> 可选参数列表 / return语句 </span>
+            </div>
+            <div>
+                <span class="q-tag">填空题</span>
+                5. 关于函数的关键字参数使用限制，函数定义时，关键字参数必须位于位置参数 <span class="red-pen underline"> 之后 </span>。
+            </div>
+            <div>
+                <span class="q-tag">计算题</span>
+                6. 已知 f = lambda x: x+3，那么表达式 f(3) 的值为 <span class="red-pen underline"> 6 </span>。
+            </div>
+            <div>
+                <span class="q-tag">填空题</span>
+                7. 若使demo函数中的x来自全局变量x，则空格处应填入 <span class="red-pen underline"> global x </span>。
+            </div>
+            <div>
+                <span class="q-tag">代码题</span>
+                8. 以下代码的输出结果是？ <span class="red-pen"> (2, 9) </span>
+                <div class="code-block text-xs"># 统计 'I like Myself!'
+# isupper() -> res[0] (I, M -> 2个)
+# islower() -> res[1] (likeyself -> 9个)
+print(fun('I like Myself!'))</div>
+            </div>
+            <div>
+                <span class="q-tag">代码题</span>
+                9. 以下代码的输出结果是？ <span class="red-pen"> 720 </span>
+                <div class="text-xs text-gray-600">print(fat(6)) # 6的阶乘</div>
+            </div>
+            <div>
+                <span class="q-tag">代码题</span>
+                10. 以下代码的输出结果是？ <span class="red-pen"> [33, 44] </span>
+                <div class="code-block text-xs">dds = [23, 22, 33, 44]  
+dds.insert(1, 25) # [23, 25, 22, 33, 44]
+dds.pop(2)        # 删掉22 -> [23, 25, 33, 44]
+dds.append(40)    # [23, 25, 33, 44, 40]
+print(dds[2:4])   # 下标2,3 -> [33, 44]</div>
+            </div>
+            
+            <div class="book-problem page-break-inside-avoid">
+                <div class="font-bold text-blue-800 flex items-center gap-2 mb-2">
+                    <span class="material-symbols-outlined">menu_book</span> 书本 P95 递归
+                </div>
+                <div><span class="q-tag">简答题</span> 每个递归函数的两个主要部分？</div>
+                <div class="red-pen explanation-block">
+                    1. <strong>基准情形 (Base Case)</strong>：递归的终止条件。<br>
+                    2. <strong>递归步骤 (Recursive Step)</strong>：将问题分解并调用自身。
+                </div>
+            </div>
+
+            <div>
+                <span class="q-tag">简答题</span>
+                变量作用域中局部变量和全局变量的区别?
+                <div class="red-pen explanation-block">
+                    - <strong>局部变量</strong>：在函数内部定义，只在函数内有效，函数结束即销毁。<br>
+                    - <strong>全局变量</strong>：在模块层级定义，整个程序生命周期内有效。函数内修改全局变量需用 global。
+                </div>
+            </div>
+            <div>
+                <span class="q-tag">编程题</span>
+                编写一个函数，参数为一个整数，如果该数为偶数，返回True，否则返回False，并完成函数调用。
+                <div class="red-pen explanation-block">
+<pre class="code-block font-sans">
+def is_even(num):
+    return num % 2 == 0
+
+# 调用
+print(is_even(10)) # True
+</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第五章 -->
+    <div class="mb-6">
+        <h2 class="text-xl font-bold mb-4 border-l-4 border-gray-800 pl-3">第五章：组合数据类型</h2>
+        <div class="space-y-3">
+            <div>
+                <span class="q-tag">填空题</span>
+                1. 已知x = [1，2，3]，执行语句x.append（4）之后x的值是 <span class="red-pen underline"> [1, 2, 3, 4] </span>
+            </div>
+            <div>
+                <span class="q-tag">填空题</span>
+                2. 列表a = [1,2,3,4]，执行a.pop(1)后，a 的值是 <span class="red-pen underline"> [1, 3, 4] </span>
+            </div>
+            <div>
+                <span class="q-tag">判断题</span>
+                3. 元组与列表的主要区别是元组元素不可修改。 <span class="red-pen underline"> ( √ ) </span>
+            </div>
+            <div>
+                <span class="q-tag">选择题</span>
+                4. 若tup=(1,2,3) ，则下列选项中不合法的操作是 (<span class="red-pen"> C </span>)
+                <div class="ml-6 text-sm text-gray-600">A. tup[1:-1] &nbsp; B. a*32 &nbsp; C. a[1]=3 &nbsp; D. list(tup)</div>
+                <div class="explanation explanation-block">解析：元组不可赋值修改。</div>
+            </div>
+            <div>
+                <span class="q-tag">填空题</span>
+                5. 元组t = (5,)的长度是 <span class="red-pen underline"> 1 </span>
+            </div>
+            <div>
+                <span class="q-tag">填空题</span>
+                6. 表达式[4, 2, 2, 7, 1][-2:]的值为 <span class="red-pen underline"> [7, 1] </span>
+            </div>
+            <div>
+                <span class="q-tag">填空题</span>
+                7. 列表nums = [3, 6, 2, 7]，执行sorted(nums)后，nums 的值是 <span class="red-pen underline"> [3, 6, 2, 7] </span>
+                <div class="explanation explanation-block">解析：注意！sorted()返回新列表，不会改变原列表nums。如果是nums.sort()则会改变。</div>
+            </div>
+            <div>
+                <span class="q-tag">填空题</span>
+                8. 列表生成式[j*3 for j in range(4)]的结果是 <span class="red-pen underline"> [0, 3, 6, 9] </span>
+            </div>
+            <div>
+                <span class="q-tag">填空题</span>
+                9. [1,3,2,6,4][::3]的值为 <span class="red-pen underline"> [1, 6] </span>
+            </div>
+            <div>
+                <span class="q-tag">代码题</span>
+                10. 以下代码的输出结果是? <span class="red-pen"> [1, 2, 4, 8, 16, 32] </span>
+                <div class="code-block text-xs">n = 32; factors = []
+for i in range(1, n+1):
+     if n % i == 0: factors.append(i)
+print(factors)</div>
+            </div>
+            <div>
+                <span class="q-tag">简答题</span>
+                列表和元组的相同点和不同点，并给出示例代码创建一个列表和一个元组。
+                <div class="red-pen explanation-block">
+                    - <strong>相同</strong>：有序、可迭代、支持切片和索引。<br>
+                    - <strong>不同</strong>：列表(List)可变，用[]; 元组(Tuple)不可变，用()。<br>
+                    <span class="font-sans">my_list = [1, 2]; my_tuple = (1, 2)</span>
+                </div>
+            </div>
+            
+            <div class="book-problem page-break-inside-avoid">
+                <div class="font-bold text-blue-800 flex items-center gap-2 mb-2">
+                    <span class="material-symbols-outlined">menu_book</span> 书本 P145 (5)+(6) 编程题
+                </div>
+                <div><span class="q-tag">编程题</span> (5) 找出1000-5000内不能被10以内素数整除的数。<br>(6) 运动会统计（嵌套列表）。</div>
+                <div class="red-pen explanation-block">
+<pre class="code-block font-sans">
+# (5) 
+import random
+nums = [random.randint(1000, 5000) for _ in range(20)]
+primes = [2, 3, 5, 7]
+res = [n for n in nums if all(n % p != 0 for p in primes)]
+print(res)
+
+# (6) 伪代码逻辑
+# 遍历学生列表，len(stu['projects']) > 2 则计数
+# if '3000m' in stu['projects']: print(...)
+</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第六章 -->
+    <div class="mb-6">
+        <h2 class="text-xl font-bold mb-4 border-l-4 border-gray-800 pl-3">第六章：字典与集合</h2>
+        <div class="space-y-3">
+            <div>
+                <span class="q-tag">简答题</span>
+                1. 在 Python 中,如何访问字典中的值? <span class="red-pen underline"> 字典名[键] 或 字典名.get(键) </span>
+            </div>
+            <div>
+                <span class="q-tag">填空题</span>
+                2. 字典dic = {"name":"Zhangsan", "age":23}，获取 "age" 对应的值的方式是? <span class="red-pen underline"> dic["age"] </span>
+            </div>
+            <div>
+                <span class="q-tag">填空题</span>
+                3. 字典dic = {"id": 2311, "name": "Mike"}，删除 "id" 键的语句是? <span class="red-pen underline"> del dic["id"] </span>
+            </div>
+            <div>
+                <span class="q-tag">计算题</span>
+                4. S1={1,2,3,4,5}，S2={4,5,6}<br>
+                S1|S2 = <span class="red-pen"> {1,2,3,4,5,6} </span>; S1&S2 = <span class="red-pen"> {4,5} </span>; <br>
+                S1^S2 = <span class="red-pen"> {1,2,3,6} </span>; S1-S2 = <span class="red-pen"> {1,2,3} </span>
+            </div>
+            <div>
+                <span class="q-tag">代码题</span>
+                5. 以下代码的输出结果是 <span class="red-pen"> {'A':1, 'p':2, 'l':1, 'e':1} </span>
+                <div class="code-block text-xs">z = 'Apple'; c = dict()                  
+for ch in z: c[ch] = c.get(ch, 0) + 1
+print(c)</div>
+            </div>
+            <div>
+                <span class="q-tag">代码题</span>
+                6. 以下代码的输出结果是 <span class="red-pen"> Unknow </span>
+                <div class="code-block text-xs">info = {"city": "Beijing", "zipcode": 100000}
+if "country" in info: ... else: print("Unknow")</div>
+            </div>
+            <div>
+                <span class="q-tag">代码题</span>
+                7. 以下代码的输出结果是 <span class="red-pen"> Python编程 65 </span>
+                <div class="ml-6 text-xs text-gray-600">book["price"] = 65; print(title, price)</div>
+            </div>
+            <div>
+                <span class="q-tag">简答题</span>
+                字典和集合的相同点和不同点，并给出一个示例代码。
+                <div class="red-pen explanation-block">
+                    - <strong>相同</strong>：都用{}表示，都是无序的（Python 3.7+字典有序，但理论上视为映射），都不可重复（字典key，集合元素）。<br>
+                    - <strong>不同</strong>：字典是键值对(Key-Value)；集合是单一元素(Value)。<br>
+                    <span class="font-sans">d = {"k":1}; s = {1, 2}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第七章 -->
+    <div class="mb-6">
+        <h2 class="text-xl font-bold mb-4 border-l-4 border-gray-800 pl-3">第七章：文件与异常</h2>
+        <div class="space-y-3">
+            <div>
+                <span class="q-tag">填空题</span>
+                1. 在 Python 中,用来异常的捕获和处理的关键字是？ <span class="red-pen underline"> try ... except </span>
+            </div>
+            <div>
+                <span class="q-tag">填空题</span>
+                2. 打开文件时，模式"r"表示？ <span class="red-pen underline"> 只读 (Read only) </span>
+            </div>
+            <div>
+                <span class="q-tag">填空题</span>
+                3. 处理可能出现的除以 0 错误，应使用什么语句？ <span class="red-pen underline"> except ZeroDivisionError: </span>
+            </div>
+        </div>
+    </div>
+
 </div>
-<div class="border p-4">
-<p>7. 以下代码的输出结果是_______________。</p>
-<div class="code-block">book = {
-    "title": "Python编程",
-    "price": 59,
-    "tags": ["编程", "入门"],
-    "info": {"作者": "李四", "出版社": "科技出版社"}}
-book["price"] = 65
-print(book["title"], book["price"])</div>
-<input class="input-line answer-red w-full" type="text" value="Python编程 65">
-</div>
-<div class="mt-4">
-<p>字典和集合的相同点和不同点，并给出一个示例代码展示如何创建一个字典和一个集合。</p>
-<textarea class="input-line answer-red w-full h-24 resize-none">相同：都使用大括号{}，都是无序的（Python 3.7+字典有序），都基于哈希表实现，键必须是不可变类型。
-不同：字典存储键值对(key-value)，集合只存储键(key/unique values)。
-示例：
-d = {'k': 1}
-s = {1, 2}</textarea>
-</div>
-</div>
-</div>
-<!-- Chapter 7 -->
-<div class="mb-8">
-<h2 class="text-xl font-bold mb-4 bg-gray-100 p-2 border-l-4 border-gray-800">第七章：文件和异常</h2>
-<div class="space-y-4">
-<p>1. 在 Python 中,用来异常的捕获和处理的关键字是？<input class="input-line answer-red w-60 inline-block" type="text" value="try...except"></p>
-<p>2. 打开文件时，模式"r"表示？<input class="input-line answer-red w-60 inline-block" type="text" value="只读模式 (Read Only)"></p>
-<p>3. 处理可能出现的除以 0 错误，应使用什么语句？<input class="input-line answer-red w-60 inline-block" type="text" value="try...except ZeroDivisionError"></p>
-</div>
-</div>
-<!-- Footer -->
-<div class="text-center border-t-2 border-black pt-4 mt-12">
-<p>—— 考试结束，请检查答题 ——</p>
-</div>
-</div>
+
 <script>
-        function exportToHTML() {
-            const clone = document.documentElement.cloneNode(true);
-            
-            const inputs = document.querySelectorAll('input, textarea');
-            const clonedInputs = clone.querySelectorAll('input, textarea');
-            
-            for (let i = 0; i < inputs.length; i++) {
-                const input = inputs[i];
-                const clonedInput = clonedInputs[i];
-                
-                if (input.type === 'checkbox' || input.type === 'radio') {
-                    if (input.checked) {
-                        clonedInput.setAttribute('checked', 'checked');
-                    } else {
-                        clonedInput.removeAttribute('checked');
-                    }
-                } else if (input.tagName.toLowerCase() === 'textarea') {
-                    clonedInput.innerHTML = input.value;
-                } else {
-                    clonedInput.setAttribute('value', input.value);
-                }
-            }
+    function exportHTML() {
+        const htmlContent = document.documentElement.outerHTML;
+        const blob = new Blob([htmlContent], {type: 'text/html'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'Python_Review_Full.html';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
 
-            const saveBtn = clone.querySelector('#saveBtn');
-            if (saveBtn) {
-                saveBtn.remove();
-            }
-
-            const htmlContent = "<!DOCTYPE html>\n" + clone.outerHTML;
-            
-            const blob = new Blob([htmlContent], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            
-            // Name input was removed, so we use a default filename
-            let fileName = "Python复习_模拟试卷.html";
-
-            a.href = url;
-            a.download = fileName;
-            document.body.appendChild(a);
-            a.click();
-            
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+    function toggleAnswers() {
+        const answers = document.querySelectorAll('.red-pen');
+        const btnText = document.getElementById('toggle-text');
+        
+        let isHidden = false;
+        if (answers.length > 0) {
+            // check first element state
+            isHidden = answers[0].style.visibility === 'hidden';
         }
-    </script>
 
-</body></html>
+        answers.forEach(el => {
+            el.style.visibility = isHidden ? 'visible' : 'hidden';
+        });
+        
+        btnText.innerText = isHidden ? "显示/隐藏答案与解析" : "显示答案";
+    }
+</script>
+
+</body>
+</html>
